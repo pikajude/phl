@@ -11,3 +11,17 @@
  *= require_self
  *= require_tree .
  */
+
+@mixin retina-bg($image, $width, $height, $type: 'png') {
+  background-image: url("#{$image}.#{$type}");
+
+  @media (-webkit-min-device-pixel-ratio: 2),
+         (min-resolution: 192dpi) {
+    background-image: url("#{$image}@2x.#{$type}");
+    background-size: $width $height;
+  }
+}
+
+body {
+  @include retina-bg('background', 64px, 65px);
+}
