@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130331031328) do
+ActiveRecord::Schema.define(version: 20130331214048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,7 +141,6 @@ ActiveRecord::Schema.define(version: 20130331031328) do
   create_table "teams", force: true do |t|
     t.string   "name",              limit: 64,                    null: false
     t.string   "short_name",        limit: 12,                    null: false
-    t.string   "color",                        default: "000000", null: false
     t.boolean  "d1",                           default: true
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -149,6 +148,7 @@ ActiveRecord::Schema.define(version: 20130331031328) do
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
+    t.integer  "color",                        default: 16777215
   end
 
   create_table "trades", force: true do |t|

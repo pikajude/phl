@@ -22,6 +22,11 @@
   }
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   @include retina-bg('background', 64px, 65px);
 }

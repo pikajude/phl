@@ -1,13 +1,13 @@
 Team.create([{
                name: "Talladega Nights",
                short_name: "Nights",
-               color: '#ffcc00',
+               color: 0xffcc00,
                d1: true
              },
              {
                name: "Animal House",
                short_name: "Animals",
-               color: "#032fa3",
+               color: 0x032fa3,
                d1: true
              }], without_protection: true)
 

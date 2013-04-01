@@ -17,7 +17,15 @@ class Player < ActiveRecord::Base
   belongs_to :team
 
   def color
-    self.team.color rescue "white"
+    self.team.color rescue 0xffffff
+  end
+
+  def hex_color
+    self.team.hex_color rescue "#ffffff"
+  end
+
+  def lightness
+    self.team.lightness rescue 1.0
   end
 
   def self.find_first_by_auth_conditions warden_conditions
