@@ -3,7 +3,8 @@ Phl::Application.routes.draw do
 
   resources :trades
 
-  get '/attend/:game' => 'games#attend', as: 'attend_game'
+  get '/attend/:game'     => 'games#attend',     as: 'attend_game'
+  get '/attendance/:game' => 'games#attendance', as: 'game_attendance'
 
   root to: 'players#index'
 end

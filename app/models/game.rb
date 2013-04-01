@@ -6,6 +6,7 @@ class Game < ActiveRecord::Base
   before_save :different_teams
 
   has_many :scheduled_attendances
+  has_many :players, through: :scheduled_attendances
 
   private
   def different_teams
