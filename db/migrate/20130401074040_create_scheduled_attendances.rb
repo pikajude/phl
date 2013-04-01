@@ -1,0 +1,10 @@
+class CreateScheduledAttendances < ActiveRecord::Migration
+  def change
+    create_table :scheduled_attendances do |t|
+      t.integer :player_id
+      t.integer :game_id
+
+      t.timestamps
+    end
+  end
+end

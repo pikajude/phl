@@ -1,16 +1,24 @@
-Team.create([{
-               name: "Talladega Nights",
-               short_name: "Nights",
-               color: 0xffcc00,
-               d1: true
-             },
-             {
-               name: "Animal House",
-               short_name: "Animals",
-               color: 0x032fa3,
-               d1: true
-             }], without_protection: true)
+Season.create({
+                season_number: 9,
+                start_date:    Date.commercial(Date.today.year, Date.today.cweek, 1),
+                end_date:      Date.commercial(Date.today.year, Date.today.cweek, 1) + 6.weeks
+              }, without_protection: true)
 
+s = Season.first
+
+teams = Array.new(10) do |i|
+  name = SecureRandom.urlsafe_base64(20)
+  {
+    name: name,
+    short_name: name[0...8],
+    color: rand(0xffffff),
+    d1: true,
+    season_id: s.id,
+    seed: i + 1
+  }
+end
+
+Team.create(teams, without_protection: true)
 
 Player.create([{
                  username: "otters",
@@ -40,5 +48,15 @@ Player.create([{
                  confirmed_at: Time.now
                }], without_protection: true)
 
-Team.find_by(name: "Talladega Nights").players << Player.find_by(username: "otters")
-Team.find_by(name: "Animal House").players = [Player.find_by(username: "IWS"), Player.find_by(username: "Dummy player")]
+Team.first.players << Player.find_by(username: "otters")
+Team.last.players = [Player.find_by(username: "IWS"), Player.find_by(username: "Dummy player")]
+
+ScheduleBox.create([{
+                      title: "Schedule"
+                    }], without_protection: true)
+
+p = Player.find_by(username: "otters")
+p.dashboard_items = [[:schedule, ScheduleBox.first.id]]
+p.save
+
+Season.first.schedule!

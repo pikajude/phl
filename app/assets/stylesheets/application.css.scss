@@ -12,15 +12,7 @@
  *= require_tree .
  */
 
-@mixin retina-bg($image, $width, $height, $type: 'png') {
-  background-image: url("#{$image}.#{$type}");
-
-  @media (-webkit-min-device-pixel-ratio: 2),
-         (min-resolution: 192dpi) {
-    background-image: url("#{$image}@2x.#{$type}");
-    background-size: $width $height;
-  }
-}
+@import "mixins";
 
 * {
   margin: 0;

@@ -1,0 +1,3 @@
+var button = document.getElementById("game-attendance-<%= @game %>").getElementsByClassName("button")[0];
+button.className = "button <%= @attending ? "green" : "red" %>";
+button.innerHTML = "<%= @attending ? "coming" : "not coming" %>";

@@ -1,0 +1,3 @@
+- current_player.dashboard.each do |item|
+  .dashboard-item{id: "dashboard-item-#{item.template_name}-#{item.id}"}
+    = render partial: "dashboard/#{item.template_name}"

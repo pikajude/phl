@@ -11,8 +11,11 @@ class Player < ActiveRecord::Base
 
   has_attached_file :avatar, styles: { original: "150x150>" }
 
-  has_many :posts,         dependent: :destroy
-  has_many :forum_threads, dependent: :destroy
+  has_many :posts
+  has_many :forum_threads
+  has_many :scheduled_attendances
+
+  serialize :dashboard_items
 
   belongs_to :team
 
@@ -24,8 +27,8 @@ class Player < ActiveRecord::Base
     self.team.hex_color rescue "#ffffff"
   end
 
-  def lightness
-    self.team.lightness rescue 1.0
+  def bright
+    self.team.bright rescue true
   end
 
   def self.find_first_by_auth_conditions warden_conditions
@@ -34,6 +37,30 @@ class Player < ActiveRecord::Base
       where(conditions).where(["lower(username) = :value", { value: username.downcase }]).first
     else
       where(conditions).first
+    end
+  end
+
+  def attending? game_id
+    self.scheduled_attendances.where(game_id: game_id).any?
+  end
+
+  def attend game_id
+    att = ScheduledAttendance.new
+    att.player = self
+    att.game_id = game_id
+    att.save
+  end
+
+  def unattend game_id
+    self.scheduled_attendances.where(game_id: game_id).delete_all
+  end
+
+  def dashboard
+    (self.dashboard_items || []).map do |ty,id|
+      case ty
+      when :schedule
+        ScheduleBox.find(id)
+      end
     end
   end
 end

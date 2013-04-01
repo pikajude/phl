@@ -1,12 +1,11 @@
 class Game < ActiveRecord::Base
   belongs_to :season
-  has_one :home_team, class_name: :Team
-  has_one :away_team, class_name: :Team
+  belongs_to :home_team, class_name: :Team
+  belongs_to :away_team, class_name: :Team
 
-  validates_presence_of :home_team
-  validates_presence_of :away_team
-  
   before_save :different_teams
+
+  has_many :scheduled_attendances
 
   private
   def different_teams

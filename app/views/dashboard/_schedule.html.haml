@@ -1,0 +1,24 @@
+%ul
+  - next_game = Season.next_games_for(current_player.team.id).first
+  - home = next_game.home_team
+  - away = next_game.away_team
+  %li
+    %h3
+      %span.seed= home.seed
+      = home.short_name
+      %span.game-order
+        game
+        = next_game.order
+    %h3
+      %span.seed= away.seed
+      = away.short_name
+      %span.game-attendance{id: "game-attendance-#{next_game.id}"}
+        I am
+        = attendance_button current_player, next_game
+  - Season.previous_games_for(current_player.team.id).each do |game|
+    - h = game.home_team
+    - a = game.away_team
+
+    %li
+      %h3
+        %span.seed= h.seed

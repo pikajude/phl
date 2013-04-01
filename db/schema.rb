@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130331214048) do
+ActiveRecord::Schema.define(version: 20130401074040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,9 @@ ActiveRecord::Schema.define(version: 20130331214048) do
     t.integer  "order"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "played_on",    default: '2013-04-01 03:15:05', null: false
+    t.integer  "week"
+    t.integer  "day"
   end
 
   create_table "goals", force: true do |t|
@@ -105,6 +108,7 @@ ActiveRecord::Schema.define(version: 20130331214048) do
     t.integer  "failed_attempts",                     default: 0
     t.string   "unlock_token"
     t.datetime "locked_at"
+    t.string   "dashboard_items"
   end
 
   add_index "players", ["confirmation_token"], name: "index_players_on_confirmation_token", unique: true
@@ -122,12 +126,26 @@ ActiveRecord::Schema.define(version: 20130331214048) do
     t.datetime "updated_at"
   end
 
+  create_table "schedule_boxes", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "title"
+  end
+
+  create_table "scheduled_attendances", force: true do |t|
+    t.integer  "player_id"
+    t.integer  "game_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "seasons", force: true do |t|
     t.string   "name"
     t.datetime "start_date"
     t.datetime "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "season_number"
   end
 
   create_table "substitutions", force: true do |t|
@@ -149,6 +167,9 @@ ActiveRecord::Schema.define(version: 20130331214048) do
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
     t.integer  "color",                        default: 16777215
+    t.integer  "season_id"
+    t.integer  "points",                       default: 0,        null: false
+    t.integer  "seed",                                            null: false
   end
 
   create_table "trades", force: true do |t|
