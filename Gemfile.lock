@@ -63,6 +63,8 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    font-awesome-rails (3.0.2.0)
+      railties (>= 3.1)
     haml (4.0.1)
       tilt
     haml-rails (0.4)
@@ -160,6 +162,7 @@ DEPENDENCIES
   debugger
   delorean
   devise
+  font-awesome-rails
   haml-rails
   jbuilder (~> 1.0.1)
   jquery-rails

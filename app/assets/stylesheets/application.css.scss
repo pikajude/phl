@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require font-awesome
  *= require_tree .
  */
 
@@ -20,5 +21,5 @@
 }
 
 body {
-  @include retina-bg('background', 64px, 65px);
+  @include retina-bg('background', 64px, 64px);
 }

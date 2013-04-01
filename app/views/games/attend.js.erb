@@ -1,3 +1,5 @@
-var button = document.getElementById("game-attendance-<%= @game %>").getElementsByClassName("button")[0];
-button.className = "button <%= @attending ? "green" : "red" %>";
-button.innerHTML = "<%= @attending ? "coming" : "not coming" %>";
+<% from, to = *(@attending ? ["red", "green"] : ["green", "red"]) %>
+$("#game-attendance-<%= @game %> .button")
+  .removeClass("<%= from %>")
+  .addClass("<%= to %>")
+  .html("<%= "not " unless @attending %>coming");
