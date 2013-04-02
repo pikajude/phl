@@ -24,4 +24,16 @@ class Team < ActiveRecord::Base
     r, g, b = *self.color_bytes.map{|x|x.to_f / 255}
     (r * 0.2126) + (g * 0.7152) + (b * 0.0722) > 0.7
   end
+
+  def games
+    Game.where('home_team_id = ? OR away_team_id = ?', self.id, self.id)
+  end
+
+  def previous_games
+    self.games.where('played_on < ?', Time.now)
+  end
+
+  def next_games
+    self.games.where('played_on >= ?', Time.now)
+  end
 end

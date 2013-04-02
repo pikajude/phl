@@ -8,7 +8,7 @@ class Season < ActiveRecord::Base
 
   class << self
     def current
-      Season.where('start_date <= ? AND end_date >= ?', Date.today, Date.today).first
+      Season.where('end_date >= ?', Date.today).order('season_number DESC').first
     end
 
     def current_week
@@ -21,38 +21,20 @@ class Season < ActiveRecord::Base
 
     def next_games
       cur = Season.current
-      g = if Season.current_day > 3
-        cur.games.where(week: cur.current_week + 1, day: 1)
-      else
-        cur.games.where(week: cur.current_week, day: Season.current_day)
-      end.first
-      if g.nil?
+      if cur.nil?
         Game.none
       else
-        cur.games.where('played_on >= ?', g.played_on)
+        cur.games.where('played_on >= ?', Time.now)
       end
     end
 
     def previous_games
       cur = Season.current
-      g = if Season.current_day == 1
-        cur.games.where(week: cur.current_week - 1, day: 3)
-      else
-        cur.games.where(week: cur.current_week, day: [Season.current_day, 3].min)
-      end.first
-      if g.nil?
+      if cur.nil?
         Game.none
       else
-        cur.games.where('played_on <= ?', g.played_on)
+        cur.games.where('played_on < ?', Time.now)
       end
-    end
-
-    def next_games_for team_id
-      Season.next_games.where('home_team_id = ? OR away_team_id = ?', team_id, team_id)
-    end
-
-    def previous_games_for team_id
-      Season.previous_games.where('home_team_id = ? OR away_team_id = ?', team_id, team_id)
     end
   end
 

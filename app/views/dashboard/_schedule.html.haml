@@ -1,5 +1,5 @@
 %ul
-  - next_game = Season.next_games_for(current_player.team.id).first
+  - next_game = current_player.team.next_games.first
   - home = next_game.home_team
   - away = next_game.away_team
   %li
@@ -18,10 +18,18 @@
     %h4.view-attendance-link<
       %i.icon-asterisk.icon-spin.hidden
       = link_to "Who's coming?", game_attendance_path(next_game), remote: true
-  - Season.previous_games_for(current_player.team.id).each do |game|
+  - current_player.team.previous_games.reverse.each do |game|
     - h = game.home_team
     - a = game.away_team
 
     %li
       %h3
         %span.seed= h.seed
+        = h.short_name
+        %span.score= game.home_score
+
+    %li
+      %h3
+        %span.seed= a.seed
+        = a.short_name
+        %span.score= game.away_score

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130401074040) do
+ActiveRecord::Schema.define(version: 20130402184009) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 20130401074040) do
     t.integer  "half"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "team_id"
   end
 
   create_table "players", force: true do |t|
@@ -170,6 +171,11 @@ ActiveRecord::Schema.define(version: 20130401074040) do
     t.integer  "season_id"
     t.integer  "points",                       default: 0,        null: false
     t.integer  "seed",                                            null: false
+    t.integer  "wins",                         default: 0,        null: false
+    t.integer  "losses",                       default: 0,        null: false
+    t.integer  "ties",                         default: 0,        null: false
+    t.integer  "overtime_wins",                default: 0,        null: false
+    t.integer  "overtime_losses",              default: 0,        null: false
   end
 
   create_table "trades", force: true do |t|

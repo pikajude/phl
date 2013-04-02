@@ -20,43 +20,43 @@ end
 
 Team.create(teams, without_protection: true)
 
-Player.create([{
-                 username: "otters",
-                 signature: "test signature!",
-                 title: "PHL administrator",
-                 rep: 0,
-                 role: "admin",
-                 email: "joel@example.com",
-                 password: "password",
-                 confirmed_at: Time.now
-               },
-               {
-                 username: "IWS",
-                 signature: "v gay",
-                 title: "title",
-                 rep: 0,
-                 role: "gm",
-                 email: "thing@example.com",
-                 password: "password",
-                 confirmed_at: Time.now
-               },
-               {
-                 username: "Dummy player",
-                 role: "player",
-                 email: "foobar@baz.com",
-                 password: "bazbazbaz",
-                 confirmed_at: Time.now
-               }], without_protection: true)
-
-Team.first.players << Player.find_by(username: "otters")
-Team.last.players = [Player.find_by(username: "IWS"), Player.find_by(username: "Dummy player")]
+Team.all.each do |team|
+  Player.create(Array.new(6){|i|
+    {
+      username: SecureRandom.urlsafe_base64(8),
+      signature: SecureRandom.urlsafe_base64(24),
+      title: SecureRandom.urlsafe_base64(16),
+      rep: 0,
+      role: i == 0 ? "gm" : "player",
+      email: SecureRandom.urlsafe_base64(8) + "@example.com",
+      password: "password",
+      confirmed_at: Time.now,
+      team_id: team.id
+    }
+  }, without_protection: true)
+end
 
 ScheduleBox.create([{
                       title: "Schedule"
                     }], without_protection: true)
 
-p = Player.find_by(username: "otters")
+p = Player.first
 p.dashboard_items = [[:schedule, ScheduleBox.first.id]]
 p.save
 
-Season.first.schedule!
+season = Season.first
+season.schedule!
+
+season.games.each do |game|
+  rand(5).+(1).times do
+    player = game.send(rand(2) == 1 ? :home_team : :away_team).players.order('RANDOM()').first
+    game.goals.create([{
+      scorer_id: player.id,
+      time: rand(300),
+      half: rand(3) + 1,
+      team_id: player.team.id
+    }], without_protection: true)
+  end
+
+  game.save
+end
