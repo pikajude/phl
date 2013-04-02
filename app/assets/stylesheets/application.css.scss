@@ -20,6 +20,10 @@
   padding: 0;
 }
 
+.hidden {
+  display: none !important;
+}
+
 body {
   @include retina-bg('background', 64px, 64px);
 }

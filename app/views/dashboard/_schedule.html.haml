@@ -15,7 +15,9 @@
       %span.game-attendance{id: "game-attendance-#{next_game.id}"}
         I am
         = attendance_button current_player, next_game
-    %h4.view-attendance-link= link_to "Who's coming?", game_attendance_path(next_game)
+    %h4.view-attendance-link<
+      %i.icon-asterisk.icon-spin.hidden
+      = link_to "Who's coming?", game_attendance_path(next_game), remote: true
   - Season.previous_games_for(current_player.team.id).each do |game|
     - h = game.home_team
     - a = game.away_team
