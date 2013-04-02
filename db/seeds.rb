@@ -1,10 +1,9 @@
-Season.create({
-                season_number: 9,
-                start_date:    Date.commercial(Date.today.year, Date.today.cweek, 1),
-                end_date:      Date.commercial(Date.today.year, Date.today.cweek, 1) + 6.weeks
-              }, without_protection: true)
-
-s = Season.first
+s = Season.create({
+                    name: "Season 9",
+                    season_number: 9,
+                    start_date:    Date.commercial(Date.today.year, Date.today.cweek, 1),
+                    end_date:      Date.commercial(Date.today.year, Date.today.cweek, 1) + 6.weeks
+                  }, without_protection: true)
 
 teams = Array.new(10) do |i|
   name = SecureRandom.urlsafe_base64(20)
