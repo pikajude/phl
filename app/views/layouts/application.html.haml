@@ -17,7 +17,7 @@
       = link_to "PHL", root_path, id: "home"
       - if player_signed_in?
         Logged in as
-        = colored_name current_player, current_player.username
+        = colored_player_name current_player
         |
         = link_to "Logout", destroy_player_session_path, method: :delete
       - else

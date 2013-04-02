@@ -5,13 +5,13 @@
   %li
     %h3
       %span.seed= home.seed
-      = colored_name home, home.short_name
+      = colored_team_name home
       %span.game-order
         game
         = next_game.order
     %h3
       %span.seed= away.seed
-      = colored_name away, away.short_name
+      = colored_team_name away
       %span.game-attendance{id: "game-attendance-#{next_game.id}"}
         I am
         = attendance_button current_player, next_game
@@ -25,11 +25,11 @@
     %li
       %h3
         %span.seed= h.seed
-        = colored_name h, h.short_name
+        = colored_team_name h
         %span.score= game.home_score
 
     %li
       %h3
         %span.seed= a.seed
-        = colored_name a, a.short_name
+        = colored_team_name a
         %span.score= game.away_score

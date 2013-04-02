@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130402184009) do
+ActiveRecord::Schema.define(version: 20130402220127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 20130402184009) do
     t.integer  "ties",                         default: 0,        null: false
     t.integer  "overtime_wins",                default: 0,        null: false
     t.integer  "overtime_losses",              default: 0,        null: false
+    t.string   "slug"
   end
 
   create_table "trades", force: true do |t|

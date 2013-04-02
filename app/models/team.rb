@@ -3,6 +3,8 @@ class Team < ActiveRecord::Base
   has_many :players
 
   belongs_to :season
+  
+  before_save :sluggify
 
   has_attached_file :logo, styles: { retina: "1024x1024>", full: "512x512>", thumb: "128x128>" }
 
@@ -35,5 +37,13 @@ class Team < ActiveRecord::Base
 
   def next_games
     self.games.where('played_on >= ?', Time.now)
+  end
+
+  def sluggify
+    self.slug = self.name.parameterize
+  end
+
+  def to_param
+    self.slug
   end
 end
