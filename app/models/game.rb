@@ -13,6 +13,7 @@ class Game < ActiveRecord::Base
   }
 
   has_many :scheduled_attendances
+  has_many :attending_players, through: :scheduled_attendances, source: :player
 
   private
   def different_teams
