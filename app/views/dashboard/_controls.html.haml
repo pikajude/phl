@@ -1,0 +1,4 @@
+%h3
+  = box.title
+  = link_to("", delete_box_path(box), class: "icon-remove", method: :delete, confirm: "Are you sure you want to delete the #{box.title} box? You can't undo that.", remote: true) if box.deletable
+  = link_to "", edit_box_path(box), class: "icon-cog", remote: true

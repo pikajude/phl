@@ -14,10 +14,18 @@ class Player < ActiveRecord::Base
   has_many :posts
   has_many :forum_threads
   has_many :scheduled_attendances
+  has_many :substitutions, foreign_key: :player_on_id
+  has_many :games, through: :substitutions
+  has_many :player_proposals
+  has_many :trades, through: :player_proposals
 
   serialize :dashboard_items
 
   belongs_to :team
+
+  before_save :adjust_stats, if: Proc.new { |p|
+    p.games.any?(&:changed?)
+  }
 
   def color
     self.team.color rescue 0xffffff
@@ -62,5 +70,18 @@ class Player < ActiveRecord::Base
         ScheduleBox.find(id)
       end
     end
+  end
+
+  private
+  def adjust_stats
+    self.minutes_played = Substitution.where(player_on_id: self.id).map do |sub|
+      sub.off_time - sub.on_time
+    end.sum.to_f / 60
+    self.goals = Goal.where(scorer_id: self.id).count
+    self.assists = Goal.where('first_assist_id = ? OR second_assist_id = ?', self.id, self.id).count
+    self.points = self.goals + self.assists
+    self.goals_against = Goal.where(scored_against: self.id).count
+    self.gaa = self.goals_against / self.minutes_played * 10
+    self.ppg = self.points / self.minutes_played * 10
   end
 end

@@ -1,4 +1,7 @@
 class Trade < ActiveRecord::Base
-  has_one :giving_team, class_name: :Team
-  has_one :receiving_team, class_name: :Team
+  belongs_to :team
+
+  def opposing_trade
+    Trade.find(self.opposing_trade_id)
+  end
 end

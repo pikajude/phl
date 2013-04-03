@@ -5,6 +5,5 @@ $body-text-line-height: 18px;
 @mixin body-text {
   font-family: $body-text;
   font-size: $body-text-size;
-  line-height: $body-text-line-height;
   font-weight: 300;
 }

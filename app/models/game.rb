@@ -4,6 +4,7 @@ class Game < ActiveRecord::Base
   belongs_to :away_team, class_name: :Team
 
   has_many :goals
+  has_many :substitutions
 
   validate :different_teams
   before_save :update_scores
@@ -11,9 +12,12 @@ class Game < ActiveRecord::Base
   before_save :update_seeds, if: Proc.new { |t|
     t.home_team.points_changed? || t.away_team.points_changed?
   }
+  before_save :update_subs
 
   has_many :scheduled_attendances
   has_many :attending_players, through: :scheduled_attendances, source: :player
+  has_many :substitutions
+  has_many :players, through: :substitutions, class_name: :Player
 
   private
   def different_teams
@@ -76,6 +80,21 @@ class Game < ActiveRecord::Base
     Team.order('points DESC, name ASC').each_with_index do |team,i|
       team.seed = i + 1
       team.save
+    end
+  end
+
+  def update_subs
+    if self.substitutions.empty?
+      %w[home_team away_team].each do |team|
+        self.send(team).players.each do |p|
+          s = self.substitutions.new
+          s.player_on = p
+          s.team = p.team
+          s.on_time = 0
+          s.off_time = 600
+          s.save
+        end
+      end
     end
   end
 end

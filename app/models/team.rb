@@ -1,6 +1,8 @@
 class Team < ActiveRecord::Base
   has_many :draft_picks
   has_many :players
+  has_many :substitutions
+  has_many :trades
 
   belongs_to :season
   

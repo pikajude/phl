@@ -1,5 +1,10 @@
-<% from, to = *(@attending ? ["red", "green"] : ["green", "red"]) %>
+<% possibilities = [["red", "no"], ["green", "yes"]]
+  from, to = *(@attending ? possibilities : possibilities.reverse) %>
 $("#game-attendance-<%= @game %> .button")
-  .removeClass("<%= from %>")
-  .addClass("<%= to %>")
-  .html("<%= "not " unless @attending %>coming");
+  .removeClass("<%= from[0] %>")
+  .addClass("<%= to[0] %>")
+  .html("<%= "not " unless @attending %>coming")
+  .parent()
+  .removeClass("<%= from[1] %>")
+  .addClass("<%= to[1] %>")
+  .children("i").addClass("hidden");

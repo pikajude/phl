@@ -8,11 +8,10 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *= require_self
  *= require font-awesome
- *= require_tree .
  */
 
+@import "colors";
 @import "mixins";
 @import "typography";
 
@@ -29,3 +28,42 @@ body {
   @include retina-bg('background', 64px, 64px);
   @include body-text;
 }
+
+a {
+  color: #55a;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.colored_name {
+  padding: 1px 3px;
+  margin: -1px -3px;
+
+  &.light {
+    background: #333;
+
+    border-radius: 3px;
+  }
+}
+
+nav {
+  line-height: 55px;
+  background: #222;
+  margin-bottom: 20px;
+  padding: 0 20px;
+  color: white;
+  font-size: 14px;
+
+  a:last-child {
+    color: white;
+  }
+}
+
+@import "boards";
+@import "games";
+@import "players";
+@import "teams";
+@import "trades";

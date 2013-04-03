@@ -3,12 +3,15 @@ Phl::Application.routes.draw do
 
   resources :trades
 
-  get '/attend/:game'     => 'games#attend',     as: 'attend_game'
-  get '/attendance/:game' => 'games#attendance', as: 'game_attendance'
+  get '/attend/:game'        => 'games#attend',       as: 'attend_game'
+  get '/attendance/:game'    => 'games#attendance',   as: 'game_attendance'
 
-  get '/team/:slug'       => 'teams#team_page',  as: 'team_page'
+  get '/team/:team'          => 'teams#show',         as: 'team_page'
 
-  get '/profile/:name'    => 'players#profile',  as: 'player_profile'
+  get '/profile/:name'       => 'players#profile',    as: 'player_profile'
+
+  get '/boxes/:id/edit'      => 'players#edit_box',   as: 'edit_box'
+  delete '/boxes/:id/delete' => 'players#delete_box', as: 'delete_box'
 
   root to: 'players#index'
 end

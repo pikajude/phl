@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130402220127) do
+ActiveRecord::Schema.define(version: 20130403075147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,20 @@ ActiveRecord::Schema.define(version: 20130402220127) do
     t.integer  "team_id"
   end
 
+  create_table "pick_proposals", force: true do |t|
+    t.integer  "pick_id"
+    t.integer  "trade_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "player_proposals", force: true do |t|
+    t.integer  "player_id"
+    t.integer  "trade_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "players", force: true do |t|
     t.string   "username",               limit: 16
     t.integer  "team_id"
@@ -92,8 +106,8 @@ ActiveRecord::Schema.define(version: 20130402220127) do
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.string   "email",                               default: "", null: false
-    t.string   "encrypted_password",     limit: 128,  default: "", null: false
+    t.string   "email",                               default: "",  null: false
+    t.string   "encrypted_password",     limit: 128,  default: "",  null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -110,6 +124,13 @@ ActiveRecord::Schema.define(version: 20130402220127) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "dashboard_items"
+    t.integer  "points",                              default: 0
+    t.integer  "goals",                               default: 0
+    t.integer  "assists",                             default: 0
+    t.integer  "goals_against",                       default: 0
+    t.float    "gaa",                                 default: 0.0
+    t.float    "ppg",                                 default: 0.0
+    t.float    "minutes_played",                      default: 0.0
   end
 
   add_index "players", ["confirmation_token"], name: "index_players_on_confirmation_token", unique: true
@@ -131,6 +152,7 @@ ActiveRecord::Schema.define(version: 20130402220127) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "title"
+    t.boolean  "deletable",  default: true, null: false
   end
 
   create_table "scheduled_attendances", force: true do |t|
@@ -155,6 +177,9 @@ ActiveRecord::Schema.define(version: 20130402220127) do
     t.integer  "player_off_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "on_time"
+    t.integer  "off_time"
+    t.integer  "team_id"
   end
 
   create_table "teams", force: true do |t|
@@ -180,12 +205,10 @@ ActiveRecord::Schema.define(version: 20130402220127) do
   end
 
   create_table "trades", force: true do |t|
-    t.integer  "giving_team_id"
-    t.integer  "receiving_team_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.hstore   "giving"
-    t.hstore   "receiving"
+    t.integer  "team_id"
+    t.integer  "opposing_trade_id"
   end
 
 end

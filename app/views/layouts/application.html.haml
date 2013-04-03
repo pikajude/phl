@@ -3,7 +3,7 @@
   %head
     %title
       PHL
-      - if (cl = yield(:title))
+      - unless (cl = yield(:title)).blank?
         |
         = cl
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true

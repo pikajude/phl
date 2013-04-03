@@ -6,4 +6,8 @@ class ApplicationController < ActionController::Base
   def current_ability
     @current_ability ||= Ability.new(current_player)
   end
+
+  def not_found
+    raise ActionController::RoutingError.new("Not found")
+  end
 end

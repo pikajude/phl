@@ -5,6 +5,9 @@ module PlayersHelper
 
   def attendance_button player, game
     attending = player.attending? game
-    link_to (attending ? "coming" : "not coming"), attend_game_path(game), class: "button #{attending ? "green" : "red"}", remote: true
+    content_tag :span, class: "game-attendance #{attending ? "yes" : "no"}", id: "game-attendance-#{game.id}" do
+      content_tag(:i, "", class: "icon-spin icon-asterisk hidden") +
+      link_to((attending ? "coming" : "not coming"), attend_game_path(game), class: "button #{attending ? "green" : "red"}", remote: true)
+    end
   end
 end

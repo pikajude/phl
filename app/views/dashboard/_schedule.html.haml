@@ -12,24 +12,27 @@
     %h3
       %span.seed= away.seed
       = colored_team_name away
-      %span.game-attendance{id: "game-attendance-#{next_game.id}"}
-        I am
-        = attendance_button current_player, next_game
+      = attendance_button current_player, next_game
     %h4.view-attendance-link<
       %i.icon-asterisk.icon-spin.hidden
       = link_to "Who's coming?", game_attendance_path(next_game), remote: true
-  - current_player.team.previous_games.reverse.each do |game|
+  - current_player.team.previous_games.limit(4).reverse.each do |game|
     - h = game.home_team
     - a = game.away_team
+    - home = current_player.team == h
+    - winner = case true
+      - when game.home_score > game.away_score; home ? "win" : "loss"
+      - when game.away_score > game.home_score; home ? "loss" : "win"
+      - else "tie"
 
-    %li
+    %li{class: winner}
       %h3
         %span.seed= h.seed
         = colored_team_name h
         %span.score= game.home_score
-
-    %li
       %h3
         %span.seed= a.seed
         = colored_team_name a
         %span.score= game.away_score
+  
+  %li.control= render partial: 'dashboard/controls', locals: { box: box }

@@ -1,3 +1,5 @@
+Delorean.time_travel_to "2 weeks ago"
+
 s = Season.create({
                     name: "Season 9",
                     season_number: 9,
@@ -59,3 +61,5 @@ season.games.each do |game|
 
   game.save
 end
+
+Delorean.back_to_the_present
