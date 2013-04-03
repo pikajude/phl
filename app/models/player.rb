@@ -23,6 +23,8 @@ class Player < ActiveRecord::Base
 
   belongs_to :team
 
+  before_create :default_boxes
+
   def color
     self.team.color rescue 0xffffff
   end
@@ -66,5 +68,17 @@ class Player < ActiveRecord::Base
         ScheduleBox.find(id)
       end
     end
+  end
+
+  def to_param
+    username
+  end
+
+  private
+  def default_boxes
+    s = ScheduleBox.new
+    s.title = "Schedule"
+    s.save
+    (self.dashboard_items ||= []) << [:schedule, s.id]
   end
 end

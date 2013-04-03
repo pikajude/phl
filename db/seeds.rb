@@ -37,14 +37,6 @@ Team.all.each do |team|
   }, without_protection: true)
 end
 
-ScheduleBox.create([{
-                      title: "Schedule"
-                    }], without_protection: true)
-
-p = Player.first
-p.dashboard_items = [[:schedule, ScheduleBox.first.id]]
-p.save
-
 season = Season.first
 season.schedule!
 
