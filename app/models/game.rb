@@ -13,6 +13,10 @@ class Game < ActiveRecord::Base
     t.home_team.points_changed? || t.away_team.points_changed?
   }
   before_save :update_subs
+  before_save :update_stats, if: Proc.new { |t|
+    t.substitutions.any?(&:changed?) || t.substitutions.count != t.substitution_count
+  }
+  before_save :update_substitution_count
 
   has_many :scheduled_attendances
   has_many :attending_players, through: :scheduled_attendances, source: :player
@@ -88,7 +92,7 @@ class Game < ActiveRecord::Base
       %w[home_team away_team].each do |team|
         self.send(team).players.each do |p|
           s = self.substitutions.new
-          s.player_on = p
+          s.player = p
           s.team = p.team
           s.on_time = 0
           s.off_time = 600
@@ -96,5 +100,24 @@ class Game < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def update_stats
+    self.players.each do |player|
+     player.minutes_played = player.substitutions.map do |sub|
+       sub.off_time - sub.on_time
+     end.sum.to_f / 60
+     player.goals = Goal.where(scorer_id: player.id).count
+     player.assists = Goal.where('first_assist_id = ? OR second_assist_id = ?', player.id, player.id).count
+     player.points = player.goals + player.assists
+     player.goals_against = Goal.where(scored_against: player.id).count
+     player.gaa = player.goals_against / player.minutes_played * 10
+     player.ppg = player.points / player.minutes_played * 10
+     player.save
+    end
+  end
+
+  def update_substitution_count
+    self.substitution_count = self.substitutions.count
   end
 end

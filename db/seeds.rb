@@ -50,12 +50,14 @@ season.schedule!
 
 season.games.each do |game|
   rand(5).+(1).times do
-    player = game.send(rand(2) == 1 ? :home_team : :away_team).players.order('RANDOM()').first
+    team = rand(2) == 1 ? :home_team : :away_team
+    player = game.send(team).players.order('RANDOM()').first
     game.goals.create([{
       scorer_id: player.id,
       time: rand(300),
       half: rand(3) + 1,
-      team_id: player.team.id
+      team_id: player.team.id,
+      scored_against: game.send(team == :home_team ? :away_team : :home_team).players.order('RANDOM()').first.id
     }], without_protection: true)
   end
 

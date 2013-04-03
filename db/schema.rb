@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130403075147) do
+ActiveRecord::Schema.define(version: 20130403171231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,9 +62,10 @@ ActiveRecord::Schema.define(version: 20130403075147) do
     t.integer  "order"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "played_on",    default: '2013-04-01 03:15:05', null: false
+    t.datetime "played_on",          default: '2013-04-03 17:05:14', null: false
     t.integer  "week"
     t.integer  "day"
+    t.integer  "substitution_count", default: 0,                     null: false
   end
 
   create_table "goals", force: true do |t|
@@ -77,6 +78,7 @@ ActiveRecord::Schema.define(version: 20130403075147) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "team_id"
+    t.integer  "scored_against",   null: false
   end
 
   create_table "pick_proposals", force: true do |t|
