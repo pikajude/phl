@@ -19,5 +19,4 @@ $ ->
     shade = $(this).parent().find(".shade")
     child = $(this).find("> *:first-child")
     offset = -1 * ($(this).height() - child.position().top - child.height())
-    if offset <= 30
-      shade.css "opacity", offset / 150
+    shade.css "opacity", Math.min(offset, 30) / 150
