@@ -18,12 +18,11 @@ class Player < ActiveRecord::Base
   has_many :games, through: :substitutions
   has_many :player_proposals
   has_many :trades, through: :player_proposals
-
-  serialize :dashboard_items
+  has_many :dashboard_boxes
 
   belongs_to :team
 
-  before_create :default_boxes
+  after_create :default_boxes
 
   def color
     self.team.color rescue 0xffffff
@@ -33,8 +32,8 @@ class Player < ActiveRecord::Base
     self.team.hex_color rescue "#ffffff"
   end
 
-  def bright
-    self.team.bright rescue true
+  def brightness
+    self.team.brightness rescue 1
   end
 
   def self.find_first_by_auth_conditions warden_conditions
@@ -61,24 +60,23 @@ class Player < ActiveRecord::Base
     self.scheduled_attendances.where(game_id: game_id).delete_all
   end
 
-  def dashboard
-    (self.dashboard_items || []).map do |ty,id|
-      case ty
-      when :schedule
-        ScheduleBox.find(id)
-      end
-    end
-  end
-
   def to_param
     username
   end
 
   private
   def default_boxes
-    s = ScheduleBox.new
-    s.title = "Schedule"
-    s.save
-    (self.dashboard_items ||= []) << [:schedule, s.id]
+    self.dashboard_boxes.create([
+      {
+        title: "Schedule",
+        template_name: "schedule",
+        relative_size: 1.0
+      },
+      {
+        title: "League Table",
+        template_name: "league_table",
+        relative_size: 1.0
+      }
+    ], without_protection: true)
   end
 end

@@ -1,6 +1,14 @@
 module PlayersHelper
   def colored_player_name player
-    link_to player.username, player_profile_path(player), class: "colored_name #{player.bright ? "light" : "dark"}", style: "color: #{player.hex_color}"
+    klass = case player.brightness
+            when 0..0.3
+              "dark"
+            when 0.3..0.7
+              "medium"
+            else
+              "bright"
+            end
+    link_to player.username, player_profile_path(player), class: "colored_name #{klass}", style: "color: #{player.hex_color}"
   end
 
   def attendance_button player, game

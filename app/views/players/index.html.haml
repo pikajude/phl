@@ -1,5 +1,10 @@
 - title "#{current_player.username}'s dashboard"
 
-- current_player.dashboard.each do |item|
-  .dashboard-item{class: "dashboard-item-#{item.template_name}", id: "dashboard-item-#{item.template_name}-#{item.id}"}
-    = render partial: "dashboard/#{item.template_name}", locals: { box: item }
+- current_player.dashboard_boxes.each do |item|
+  .dashboard-container
+    .dashboard-item{class: "dashboard-item-#{item.template_name}",
+                    id: "dashboard-item-#{item.template_name}-#{item.id}",
+                    "data-box-id" => item.id,
+                    style: "height: #{item.relative_size * 400}px"}
+      = render partial: "dashboard/#{item.template_name}", locals: { box: item }
+    .control= render partial: "dashboard/controls", locals: { box: item }

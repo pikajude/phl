@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130403171231) do
+ActiveRecord::Schema.define(version: 20130404022011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,16 @@ ActiveRecord::Schema.define(version: 20130403171231) do
     t.integer  "team_id"
     t.integer  "board_id"
     t.boolean  "is_group"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "dashboard_boxes", force: true do |t|
+    t.string   "title"
+    t.boolean  "deletable"
+    t.integer  "player_id"
+    t.float    "relative_size", default: 0.0, null: false
+    t.string   "template_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -62,10 +72,11 @@ ActiveRecord::Schema.define(version: 20130403171231) do
     t.integer  "order"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "played_on",          default: '2013-04-03 17:05:14', null: false
+    t.datetime "played_on",          default: '2013-04-04 02:34:06', null: false
     t.integer  "week"
     t.integer  "day"
     t.integer  "substitution_count", default: 0,                     null: false
+    t.boolean  "overtime",           default: false
   end
 
   create_table "goals", force: true do |t|
@@ -125,7 +136,6 @@ ActiveRecord::Schema.define(version: 20130403171231) do
     t.integer  "failed_attempts",                     default: 0
     t.string   "unlock_token"
     t.datetime "locked_at"
-    t.string   "dashboard_items"
     t.integer  "points",                              default: 0
     t.integer  "goals",                               default: 0
     t.integer  "assists",                             default: 0
@@ -148,13 +158,6 @@ ActiveRecord::Schema.define(version: 20130403171231) do
     t.integer  "forum_thread_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "schedule_boxes", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "title"
-    t.boolean  "deletable",  default: true, null: false
   end
 
   create_table "scheduled_attendances", force: true do |t|

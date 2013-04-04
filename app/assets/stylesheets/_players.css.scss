@@ -2,144 +2,90 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@import "boxes/schedule";
+@import "boxes/table";
+
+#content {
+  padding-right: 20px;
+}
+
+.dashboard-container {
+  float: left;
+  margin-bottom: 20px;
+  position: relative;
+
+  @media only screen and (max-width: 600px) {
+    width: 100%;
+    min-width: 240px;
+    max-width: 400px;
+    float: none;
+    margin: 0 auto;
+  }
+
+  @media only screen and (min-width: 601px)
+                     and (max-width: 890px) {
+    width: 50%;
+  }
+
+  @media only screen and (min-width: 891px)
+                     and (max-width: 1220px) {
+    width: 33%;
+
+    &:nth-child(3n) {
+      width: 34%;
+    }
+  }
+
+  @media only screen and (min-width: 1221px)
+                     and (max-width: 1550px) {
+    width: 25%;
+  }
+
+  @media only screen and (min-width: 1551px)
+                     and (max-width: 1880px) {
+    width: 20%;
+  }
+}
+
 .dashboard-item {
-  width: 33%;
   background: #f8f8f8;
   border-radius: 4px;
   margin-left: 20px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  padding-bottom: 39px;
+  box-sizing: border-box;
+  overflow: auto;
 }
 
-.dashboard-item-schedule {
-  li {
-    padding: 14px 17px;
-    border-bottom: 1px solid #e1e1e1;
-    list-style-type: none;
+#content .control {
+  background: #d6d6d6;
+  border-top: 1px solid #ccc;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#cbcbcb));
+  line-height: 39px;
+  border-radius: 0 0 4px 4px;
+  position: absolute;
+  bottom: 0px;
+  left: 20px;
+  right: 0px;
 
-    &:first-child {
-      border-bottom-width: 10px;
-    }
+  h3 {
+    padding: 0 13px;
+    border-top: 1px solid #ebebeb;
+    color: #454545;
+    font-size: 18px;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+    font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: 0.1em;
 
-    &.win {
-      background-color: $win;
-      border-bottom-color: borderize($win);
-    }
-    
-    &.loss {
-      background-color: $loss;
-      border-bottom-color: borderize($loss);
-    }
-
-    &.tie {
-      background-color: $tie;
-      border-bottom-color: borderize($tie);
-    }
-
-    h3 {
-      font-size: 24px;
-
-      a {
-        text-decoration: none;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-
-      .seed {
-        font-size: 14px;
-        color: #959595;
-      }
-
-      .score {
-        color: #626262;
-        float: right;
-      }
-      
-      .game-order, .game-attendance {
-        float: right;
-        line-height: 22px;
-      }
-      
-      .game-order {
-        font-size: 18px;
-        font-weight: 300;
-        float: right;
-        color: #848484;
-      }
-
-      .game-attendance {
-        font-size: 14px;
-        font-weight: normal;
-
-        &.yes i {
-          color: $attending;
-        }
-
-        &.no i {
-          color: $not-attending;
-        }
-
-        .button {
-          color: white;
-          padding: 4px 6px;
-          border-radius: 3px;
-
-          &.green {
-            background: $attending;
-          }
-
-          &.red {
-            background: $not-attending;
-          }
-
-          &:hover {
-            text-decoration: none;
-          }
-        }
-      }
-    }
-    
-    h4 {
-      text-align: center;
-      padding-top: 10px;
-      font-size: 12px;
-
-      a {
-        color: #555;
-      }
-    }
-
-    &:last-child {
-      border-radius: 0 0 4px 4px;
-      border-bottom: 0;
-    }
-
-    &.control {
-      background: #d6d6d6;
-      border-top: 1px solid #ebebeb;
-      background-image: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#cbcbcb));
-      padding: 0px 13px;
+    a {
+      float: right;
       line-height: 39px;
+      margin-left: 10px;
+      color: #585858;
 
-      h3 {
-        color: #454545;
-        font-size: 18px;
-        text-shadow: 0 1px 1px rgba(255,255,255,0.8);
-        font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue", Arial, sans-serif;
-        letter-spacing: 0.1em;
-
-        a {
-          float: right;
-          line-height: 39px;
-          margin-left: 6px;
-          color: #585858;
-
-          &:hover {
-            text-decoration: none;
-            color: #0097c2;
-          }
-        }
+      &:hover {
+        text-decoration: none;
+        color: #0097c2;
       }
     }
   }

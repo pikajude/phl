@@ -8,15 +8,14 @@ class Game < ActiveRecord::Base
 
   validate :different_teams
   before_save :update_scores
-  before_save :update_points, if: Proc.new { |t| t.home_score_changed? || t.away_score_changed? }
-  before_save :update_seeds, if: Proc.new { |t|
-    t.home_team.points_changed? || t.away_team.points_changed?
-  }
+  before_save :update_seeds
   before_save :update_subs
   before_save :update_stats, if: Proc.new { |t|
     t.substitutions.any?(&:changed?) || t.substitutions.count != t.substitution_count
   }
   before_save :update_substitution_count
+  before_save :update_overtime
+  after_save  :update_points
 
   has_many :scheduled_attendances
   has_many :attending_players, through: :scheduled_attendances, source: :player
@@ -41,47 +40,20 @@ class Game < ActiveRecord::Base
     end
   end
 
+  def update_overtime
+    self.overtime = self.goals.where(half: 3).any?
+    true
+  end
+
   def update_points
-    overtime = self.goals.where(half: 3).any?
-    home, away = *[self.home_team, self.away_team]
-    if self.home_score > self.away_score
-      if overtime
-        home.points += 2
-        home.overtime_wins += 1
-
-        away.points += 1
-        away.overtime_losses += 1
-      else
-        home.points += 3
-        home.wins += 1
-
-        away.losses += 1
-      end
-    elsif self.home_score < self.away_score
-      if overtime
-        away.points += 2
-        away.overtime_wins += 1
-
-        home.points += 1
-        home.overtime_losses += 1
-      else
-        away.points += 3
-        away.wins += 1
-
-        home.losses += 1
-      end
-    else
-      home.points += 1
-      away.points += 1
-      home.ties += 1
-      away.ties += 1
-    end
+    self.home_team.update_points
+    self.away_team.update_points
   end
   
   def update_seeds
     self.home_team.save
     self.away_team.save
-    Team.order('points DESC, name ASC').each_with_index do |team,i|
+    Team.order('points DESC, LOWER(name) ASC').each_with_index do |team,i|
       team.seed = i + 1
       team.save
     end

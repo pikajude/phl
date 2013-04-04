@@ -1,0 +1,20 @@
+%table
+  %tr
+    %th.team Team
+    %th W
+    %th L
+    %th D
+    %th OW
+    %th OL
+    %th P
+    %th GP
+  - Team.order(:seed).each do |team|
+    %tr
+      %td.team= colored_team_name team
+      %td= team.wins
+      %td= team.losses
+      %td= team.ties
+      %td= team.overtime_wins
+      %td= team.overtime_losses
+      %td= team.points
+      %td= team.games.count

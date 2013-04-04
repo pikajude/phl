@@ -1,0 +1,101 @@
+.dashboard-item-schedule {
+  li {
+    padding: 14px 17px;
+    border-bottom: 1px solid #e1e1e1;
+    list-style-type: none;
+
+    &:first-child {
+      border-bottom-width: 10px;
+    }
+
+    &.win {
+      background-color: $win;
+      border-bottom-color: borderize($win);
+    }
+    
+    &.loss {
+      background-color: $loss;
+      border-bottom-color: borderize($loss);
+    }
+
+    &.tie {
+      background-color: $tie;
+      border-bottom-color: borderize($tie);
+    }
+
+    h3 {
+      font-size: 24px;
+
+      a {
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .seed {
+        font-size: 14px;
+        color: #959595;
+      }
+
+      .score {
+        color: #626262;
+        float: right;
+      }
+      
+      .game-order, .game-attendance {
+        float: right;
+        line-height: 22px;
+      }
+      
+      .game-order {
+        font-size: 18px;
+        font-weight: 300;
+        float: right;
+        color: #848484;
+      }
+
+      .game-attendance {
+        font-size: 14px;
+        font-weight: normal;
+
+        &.yes i {
+          color: $attending;
+        }
+
+        &.no i {
+          color: $not-attending;
+        }
+
+        .button {
+          color: white;
+          padding: 4px 6px;
+          border-radius: 3px;
+
+          &.green {
+            background: $attending;
+          }
+
+          &.red {
+            background: $not-attending;
+          }
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+    
+    h4 {
+      text-align: center;
+      padding-top: 10px;
+      font-size: 12px;
+
+      a {
+        color: #555;
+      }
+    }
+  }
+}

@@ -54,7 +54,7 @@ class Season < ActiveRecord::Base
     # 8  7  6  5  4
     #
     # etc.
-    
+
     season_start = self.start_date
     ids = self.teams.map(&:id)
     top, bottom = *ids.each_slice(ids.count / 2).to_a

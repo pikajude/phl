@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  d1: false
-  season_id: 1
-
-two:
-  d1: false
-  season_id: 1

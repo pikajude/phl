@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ScheduleBoxTest < ActiveSupport::TestCase
+class DashboardBoxTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
