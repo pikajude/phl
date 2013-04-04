@@ -14,3 +14,10 @@ $ ->
   $("body").on {
     click: -> $(this).parent().children('i').removeClass('hidden')
   }, ".game-attendance .button"
+
+  $(".dashboard-item").on "scroll", (e) ->
+    shade = $(this).parent().find(".shade")
+    child = $(this).find("> *:first-child")
+    offset = -1 * ($(this).height() - child.position().top - child.height())
+    if offset <= 30
+      shade.css "opacity", offset / 150

@@ -7,4 +7,6 @@
                     "data-box-id" => item.id,
                     style: "height: #{item.relative_size * 400}px"}
       = render partial: "dashboard/#{item.template_name}", locals: { box: item }
-    .control= render partial: "dashboard/controls", locals: { box: item }
+    .control
+      .shade
+      = render partial: "dashboard/controls", locals: { box: item }
