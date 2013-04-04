@@ -5,7 +5,7 @@
     .dashboard-item{class: "dashboard-item-#{item.template_name}",
                     id: "dashboard-item-#{item.template_name}-#{item.id}",
                     "data-box-id" => item.id,
-                    style: "height: #{item.relative_size * 400}px"}
+                    style: "height: #{item.relative_size * 500}px"}
       = render partial: "dashboard/#{item.template_name}", locals: { box: item }
     .control
       .shade

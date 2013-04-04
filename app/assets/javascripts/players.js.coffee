@@ -15,8 +15,12 @@ $ ->
     click: -> $(this).parent().children('i').removeClass('hidden')
   }, ".game-attendance .button"
 
-  $(".dashboard-item").on "scroll", (e) ->
-    shade = $(this).parent().find(".shade")
-    child = $(this).find("> *:first-child")
-    offset = -1 * ($(this).height() - child.position().top - child.height())
+  unshade = (el) ->
+    shade = $(el).parent().find(".shade")
+    child = $(el).find("> *:first-child")
+    offset = -1 * ($(el).height() - child.position().top - child.height())
     shade.css "opacity", Math.min(offset, 30) / 150
+
+  $(".dashboard-item").on "scroll", (e) -> unshade e.target
+
+  $(".dashboard-item").each (_ix,el) -> unshade el
