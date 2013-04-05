@@ -1,5 +1,3 @@
-Delorean.time_travel_to "2 weeks ago"
-
 s = Season.create({
                     name: "Season 9",
                     season_number: 9,
@@ -40,23 +38,9 @@ end
 season = Season.first
 season.schedule!
 
-season.games.each do |game|
-  rand(5).+(1).times do
-    team = rand(2) == 1 ? :home_team : :away_team
-    player = game.send(team).players.order('RANDOM()').first
-    game.goals.create([{
-      scorer_id: player.id,
-      time: rand(300),
-      half: rand(3) + 1,
-      team_id: player.team.id,
-      scored_against: game.send(team == :home_team ? :away_team : :home_team).players.order('RANDOM()').first.id
-    }], without_protection: true)
-  end
+puts "Login: #{Player.first.username}
+Password: password"
 
-  game.save
+IO.popen("pbcopy", "w") do |pipe|
+  pipe.write Player.first.username
 end
-
-Delorean.back_to_the_present
-
-Game.where('played_on < ?', Time.now).update_all(finished: true)
-Game.where('played_on < ? AND RANDOM() < 0.9', Time.now).update_all(reported: true)

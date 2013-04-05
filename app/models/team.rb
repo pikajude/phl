@@ -51,9 +51,14 @@ class Team < ActiveRecord::Base
 
   def update_points
     reset_stats!
-    self.games.each do |game|
+    self.games.where('played_on < ?', Time.now).each do |game|
       home = game.home_team_id == self.id
       overtime = game.overtime
+      unless game.reported
+        self.losses += 1
+        game.away_team.losses += 1
+        next
+      end
       if game.home_score > game.away_score
         if overtime
           self.points += home ? 2 : 1

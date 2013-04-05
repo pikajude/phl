@@ -48,12 +48,9 @@
 }
 
 .dashboard-item {
-  background: #f8f8f8;
-  border-radius: 4px;
+  @include white-box;
   margin-left: 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
   padding-bottom: 39px;
-  box-sizing: border-box;
   overflow: auto;
 }
 

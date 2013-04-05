@@ -8,3 +8,9 @@
   }
 }
 
+@mixin white-box {
+  background: #f8f8f8;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  box-sizing: border-box;
+}

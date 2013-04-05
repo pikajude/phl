@@ -46,6 +46,10 @@ a {
   padding: 1px 3px;
   margin: -1px -3px;
   border-radius: 3px;
+
+  &.light {
+    background: #444;
+  }
 }
 
 nav {
@@ -59,7 +63,7 @@ nav {
   .colored_name {
     font-weight: bold;
     margin: 0;
-    
+
     &.dark {
       background: #eee;
     }
@@ -84,6 +88,12 @@ nav {
   a:last-child {
     color: white;
   }
+}
+
+.fullwidth {
+  margin: 0 20px;
+
+  @include white-box;
 }
 
 @import "boards";
