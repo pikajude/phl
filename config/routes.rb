@@ -13,5 +13,9 @@ Phl::Application.routes.draw do
   get '/boxes/:id/edit'      => 'players#edit_box',   as: 'edit_box'
   delete '/boxes/:id/delete' => 'players#delete_box', as: 'delete_box'
 
+  scope '/games/:id' do
+    resource :report, path_names: { new: 'make' }
+  end
+
   root to: 'players#index'
 end

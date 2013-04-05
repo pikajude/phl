@@ -34,3 +34,8 @@
         %span.seed= a.seed
         = colored_team_name a
         %span.score= game.away_score
+      %h4
+        - if game.reported
+          = link_to "See match report", report_path(game)
+        - elsif can? :report, game
+          = link_to "Report match", new_report_path(game)

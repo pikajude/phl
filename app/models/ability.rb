@@ -11,7 +11,10 @@ class Ability
     when "gm"
       can :manage, Team, id: player.team.id
       can :manage, Trade do |tr|
-        tr.giving_team == player.team || tr.receiving_team == player.team
+        tr.team == player.team
+      end
+      can :report, Game do |g|
+        player.games.include? g
       end
       can :read, Post
     when "agm"
