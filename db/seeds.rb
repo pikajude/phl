@@ -57,3 +57,6 @@ season.games.each do |game|
 end
 
 Delorean.back_to_the_present
+
+Game.where('played_on < ?', Time.now).update_all(finished: true)
+Game.where('played_on < ? AND RANDOM() < 0.9', Time.now).update_all(reported: true)
