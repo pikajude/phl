@@ -80,10 +80,10 @@ end
 
 Team.create(teams, without_protection: true)
 
-Team.all.each do |team|
+Team.all.each_with_index do |team, j|
   Player.create(Array.new(6){|i|
     {
-      username: SecureRandom.urlsafe_base64(8),
+      username: (j == 0 && i == 0) ? "otters" : SecureRandom.urlsafe_base64(8),
       signature: SecureRandom.urlsafe_base64(24),
       title: SecureRandom.urlsafe_base64(16),
       rep: 0,
@@ -98,12 +98,5 @@ end
 
 season = Season.first
 season.schedule!
-
-puts "Login: #{Player.first.username}
-Password: password"
-
-IO.popen("pbcopy", "w") do |pipe|
-  pipe.write Player.first.username
-end
 
 Delorean.back_to_1985

@@ -1,0 +1,2 @@
+$("#attendance-<%= @game.id %>").html("<%= escape_javascript(render partial: "attendance") %>").slideDown(300);
+$("#attendance-link").removeClass("closed").addClass("open");

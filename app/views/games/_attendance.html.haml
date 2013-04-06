@@ -1,0 +1,4 @@
+- if @coming.empty?
+  Ain't nobody!
+- else
+  = @coming.map(&:username).join(", ")

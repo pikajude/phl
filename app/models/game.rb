@@ -12,7 +12,7 @@ class Game < ActiveRecord::Base
   before_save :update_scores
   before_save :update_seeds
   before_save :update_subs
-  before_save :update_stats, if: Proc.new { |t|
+  before_save :update_stats, if: ->(t) {
     t.substitutions.any?(&:changed?) || t.substitutions.count != t.substitution_count
   }
   before_save :update_substitution_count

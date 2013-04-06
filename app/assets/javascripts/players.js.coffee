@@ -3,17 +3,16 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
-  $("body").on {
+  $(document).on {
     mouseover: -> $(this).html "not coming",
-    mouseout:  -> $(this).html "coming"
+    mouseout: -> $(this).html "coming"
   }, ".game-attendance .button.green"
-  $("body").on {
+  $(document).on {
     mouseover: -> $(this).html "coming",
-    mouseout:  -> $(this).html "not coming"
+    mouseout: -> $(this).html "not coming"
   }, ".game-attendance .button.red"
-  $("body").on {
-    click: -> $(this).parent().children('i').removeClass('hidden')
-  }, ".game-attendance .button"
+  $(document).on "click", ".game-attendance .button", ->
+    $(this).parent().children('i').removeClass('hidden')
 
   unshade = (el) ->
     shade = $(el).parent().find(".shade")
@@ -24,3 +23,9 @@ $ ->
   $(".dashboard-item").on "scroll", (e) -> unshade e.target
 
   $(".dashboard-item").each (_ix,el) -> unshade el
+
+  $(document).on "ajax:before", "#attendance-link.open", (e) ->
+    e.preventDefault()
+    $(this).removeClass("open").addClass("closed")
+    $(".attendance").slideUp 300, -> $(this).html("")
+    false

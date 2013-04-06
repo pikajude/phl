@@ -24,9 +24,7 @@ class GamesController < ApplicationController
     @coming = @game.attending_players.where(team_id: @team.id)
     
     respond_to do |format|
-      format.all do
-        render text: @coming.map(&:username).join(", ")
-      end
+      format.js
     end
   end
 end

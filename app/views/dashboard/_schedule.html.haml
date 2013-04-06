@@ -15,7 +15,8 @@
       = attendance_button current_player, next_game
     %h4.view-attendance-link<
       %i.icon-asterisk.icon-spin.hidden
-      = link_to "Who's coming?", game_attendance_path(next_game), remote: true
+      = link_to "Who's coming?", game_attendance_path(next_game), remote: true, class: "closed", id: "attendance-link"
+    .attendance{id: "attendance-#{next_game.id}"}
   - current_player.team.previous_games.limit(4).each do |game|
     - h = game.home_team
     - a = game.away_team

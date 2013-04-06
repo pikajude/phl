@@ -3,8 +3,7 @@
 - current_player.dashboard_boxes.each do |item|
   .dashboard-container
     .dashboard-item{class: "dashboard-item-#{item.template_name}",
-                    id: "dashboard-item-#{item.template_name}-#{item.id}",
-                    "data-box-id" => item.id,
+                    id: "dashboard-item-#{item.id}",
                     style: "height: #{item.relative_size * 500}px"}
       = render partial: "dashboard/#{item.template_name}", locals: { box: item }
     .control

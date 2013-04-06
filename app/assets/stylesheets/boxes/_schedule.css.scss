@@ -22,7 +22,7 @@
 
 .dashboard-item-schedule {
   li {
-    padding: 14px 17px;
+    padding: 14px 17px 8px;
     border-bottom: 1px solid #e1e1e1;
     list-style-type: none;
     position: relative;
@@ -101,18 +101,22 @@
     h4 {
       text-align: right;
       padding-top: 3px;
-      margin-bottom: -6px;
       font-size: 12px;
 
       a {
         color: #555;
       }
     }
+
+    .attendance {
+      display: none;
+    }
   }
 
   .colors {
     padding: 8px;
     height: 14px;
+    -webkit-user-select: none;
 
     div, span {
       float: left;
