@@ -16,13 +16,16 @@ class Ability
         tr.team == player.team
       end
       can :report, Game do |g|
-        player.games.include? g
+        player.games.include?(g) && !g.reported
       end
       can :read, Post
 
     when "agm"
       can :manage, Trade do |tr|
         tr.giving_team == player.team
+      end
+      can :report, Game do |g|
+        player.games.include?(g) && !g.reported
       end
       can :manage, Team
       can :read, Post

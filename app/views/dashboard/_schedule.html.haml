@@ -43,3 +43,13 @@
             = link_to "Report match", new_report_path(game)
           - if game.missing_report?
             %span.tooltip.icon-exclamation-sign.no-report-warning{title: "Games without match reports are counted as a forfeit loss for both teams!"}
+
+  %li.colors
+    .win
+    %span win
+    .loss
+    %span loss
+    .tie
+    %span tie
+    .no-report
+    %span no MR

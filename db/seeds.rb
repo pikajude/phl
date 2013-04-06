@@ -1,3 +1,5 @@
+Delorean.time_travel_to "2 weeks ago"
+
 s = Season.create({
                     name: "Season 9",
                     season_number: 9,
@@ -44,3 +46,5 @@ Password: password"
 IO.popen("pbcopy", "w") do |pipe|
   pipe.write Player.first.username
 end
+
+Delorean.back_to_1985
