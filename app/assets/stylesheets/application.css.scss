@@ -47,6 +47,10 @@ a {
   padding: 1px 3px;
   margin: -1px -3px;
   border-radius: 3px;
+
+  &.light {
+    background: #999;
+  }
 }
 
 nav {

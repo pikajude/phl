@@ -34,7 +34,7 @@ class Team < ActiveRecord::Base
   end
 
   def previous_games
-    self.games.where('played_on < ?', Time.now)
+    self.games.where('played_on < ?', Time.now).order('played_on DESC')
   end
 
   def next_games

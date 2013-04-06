@@ -16,7 +16,7 @@
     %h4.view-attendance-link<
       %i.icon-asterisk.icon-spin.hidden
       = link_to "Who's coming?", game_attendance_path(next_game), remote: true
-  - current_player.team.previous_games.limit(4).reverse.each do |game|
+  - current_player.team.previous_games.limit(4).each do |game|
     - h = game.home_team
     - a = game.away_team
     - home = current_player.team == h

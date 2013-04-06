@@ -3,6 +3,7 @@
 *.swp
 *.sassc
 .sass-cache
+tags
 capybara-*.html
 .rspec
 /.bundle

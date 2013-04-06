@@ -17,6 +17,11 @@
       background: #eaeaea;
     }
 
+    tr:nth-child(1) {
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#e3e3e3));
+      border-bottom: 1px solid #ccc;
+    }
+
     tr:last-child td {
       border-bottom: 0;
     }
