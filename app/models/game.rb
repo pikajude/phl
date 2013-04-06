@@ -1,4 +1,6 @@
 class Game < ActiveRecord::Base
+  REPORT_GRACE_PERIOD = 3.hours
+
   belongs_to :season
   belongs_to :home_team, class_name: :Team
   belongs_to :away_team, class_name: :Team
@@ -21,6 +23,14 @@ class Game < ActiveRecord::Base
   has_many :attending_players, through: :scheduled_attendances, source: :player
   has_many :substitutions
   has_many :players, through: :substitutions, class_name: :Player
+
+  def should_have_report?
+    self.played_on + REPORT_GRACE_PERIOD < Time.now
+  end
+
+  def missing_report?
+    !self.reported && self.should_have_report?
+  end
 
   private
   def different_teams

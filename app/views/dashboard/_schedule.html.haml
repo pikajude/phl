@@ -4,13 +4,13 @@
   - away = next_game.away_team
   %li
     %h3
-      %span.seed= home.seed
+      %span.seed= home.seed.to_s.rjust(2, "0")
       = colored_team_name home
       %span.game-order
         game
         = next_game.order
     %h3
-      %span.seed= away.seed
+      %span.seed= away.seed.to_s.rjust(2, "0")
       = colored_team_name away
       = attendance_button current_player, next_game
     %h4.view-attendance-link<
@@ -21,21 +21,25 @@
     - a = game.away_team
     - home = current_player.team == h
     - winner = case true
+      - when game.missing_report?; "no-report"
       - when game.home_score > game.away_score; home ? "win" : "loss"
       - when game.away_score > game.home_score; home ? "loss" : "win"
       - else "tie"
 
     %li{class: winner}
       %h3
-        %span.seed= h.seed
+        %span.seed= h.seed.to_s.rjust(2, "0")
         = colored_team_name h
         %span.score= game.home_score
       %h3
-        %span.seed= a.seed
+        %span.seed= a.seed.to_s.rjust(2, "0")
         = colored_team_name a
         %span.score= game.away_score
       %h4
         - if game.reported
           = link_to "See match report", report_path(game)
-        - elsif can? :report, game
-          = link_to "Report match", new_report_path(game)
+        - else
+          - if can? :report, game
+            = link_to "Report match", new_report_path(game)
+          - if game.missing_report?
+            %span.tooltip.icon-exclamation-sign.no-report-warning{title: "Games without match reports are counted as a forfeit loss for both teams!"}

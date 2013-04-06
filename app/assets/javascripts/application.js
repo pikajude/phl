@@ -13,4 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require jquery.tipsy
 //= require_tree .
+
+$(document).ready(function() {
+  $(".tooltip").tipsy({gravity: $.fn.tipsy.autoWE});
+});

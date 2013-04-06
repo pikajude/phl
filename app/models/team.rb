@@ -54,9 +54,11 @@ class Team < ActiveRecord::Base
     self.games.where('played_on < ?', Time.now).each do |game|
       home = game.home_team_id == self.id
       overtime = game.overtime
-      unless game.reported
-        self.losses += 1
-        game.away_team.losses += 1
+      if !game.reported
+        if game.should_have_report?
+          self.losses += 1
+          game.away_team.losses += 1
+        end
         next
       end
       if game.home_score > game.away_score
