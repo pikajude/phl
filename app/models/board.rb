@@ -7,8 +7,5 @@ class Board < ActiveRecord::Base
   belongs_to :parent_board, class_name: :Board
   has_many :child_boards, class_name: :Board, dependent: :destroy
   belongs_to :team
-
-  def moderator
-    User.find self.moderator_id
-  end
+  belongs_to :moderator, class_name: :Player
 end
