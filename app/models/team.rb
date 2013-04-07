@@ -49,47 +49,70 @@ class Team < ActiveRecord::Base
     self.slug
   end
 
-  def update_points
-    reset_stats!
-    self.games.where('played_on < ?', Time.now).each do |game|
-      home = game.home_team_id == self.id
+  def win!
+    self.points += 3
+    self.wins += 1
+  end
+
+  def lose!
+    self.losses += 1
+  end
+
+  def tie!
+    self.points += 1
+    self.ties += 1
+  end
+
+  def overtime_win!
+    self.points += 2
+    self.overtime_wins += 1
+  end
+
+  def overtime_lose!
+    self.points += 1
+    self.overtime_losses += 1
+  end
+
+  def self.update_points
+    Team.all.each(&:reset_stats!)
+    Game.where('played_on < ?', Time.now).each do |game|
       overtime = game.overtime
+      h = game.home_team
+      a = game.away_team
       if !game.reported
         if game.should_have_report?
-          self.losses += 1
-          game.away_team.losses += 1
+          h.lose!
+          a.lose!
+          h.save
+          a.save
         end
         next
       end
       if game.home_score > game.away_score
         if overtime
-          self.points += home ? 2 : 1
-          self.overtime_wins += 1 if home
-          self.overtime_losses += 1 unless home
+          h.overtime_win!
+          a.overtime_lose!
         else
-          self.points += home ? 3 : 0
-          self.wins += 1 if home
-          self.losses += 1 unless home
+          h.win!
+          a.lose!
         end
       elsif game.home_score < game.away_score
         if overtime
-          self.points += home ? 1 : 2
-          self.overtime_wins += 1 unless home
-          self.overtime_losses += 1 if home
+          h.overtime_lose!
+          a.overtime_win!
         else
-          self.points += home ? 0 : 3
-          self.wins += 1 unless home
-          self.losses += 1 if home
+          h.lose!
+          a.win!
         end
       else
-        self.points += 1
-        self.ties += 1
+        h.tie!
+        a.tie!
       end
+      h.save
+      a.save
     end
-    self.save
   end
 
-  private
   def reset_stats!
     self.points = 0
     self.wins = 0
