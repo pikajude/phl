@@ -30,4 +30,7 @@
         #notice
           %span.close.icon-remove
           %p= notice
-      = yield
+      - if params[:controller] == 'players' && params[:action] == 'index'
+        = yield
+      - else
+        .page= yield
