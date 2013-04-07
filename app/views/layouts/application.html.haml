@@ -11,8 +11,6 @@
     = csrf_meta_tags
 
   %body
-    .alert= alert
-    .notice= notice
     %nav
       = link_to "PHL", root_path, id: "home"
       - if player_signed_in?
@@ -23,4 +21,13 @@
       - else
         = link_to "Login", new_player_session_path
 
-    #content= yield
+    #content
+      - unless alert.blank?
+        #alert
+          %span.close.icon-remove
+          %p= alert
+      - unless notice.blank?
+        #notice
+          %span.close.icon-remove
+          %p= notice
+      = yield

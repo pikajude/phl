@@ -25,6 +25,48 @@
   display: none !important;
 }
 
+#alert, #notice {
+  z-index: 1000;
+  font-size: 16px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+  position: relative;
+  font-weight: 400;
+
+  p {
+    padding: 10px;
+  }
+
+  .close {
+    cursor: pointer;
+    float: right;
+    margin: 10px 11px;
+  }
+}
+
+#alert {
+  background-color: darken($warning, 10);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(darken($warning, 8)), to(darken($warning, 12)));
+
+  .close {
+    color: darken($warning, 70);
+    text-shadow: 0 1px 0 white;
+  }
+}
+
+#notice {
+  background-color: darken($win, 10);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(darken($win, 8)), to(darken($win, 12)));
+
+  .close {
+    color: darken($win, 70);
+    text-shadow: 0 1px 0 white;
+  }
+}
+
 body {
   @include retina-bg('background', 64px, 64px);
   @include body-text;
