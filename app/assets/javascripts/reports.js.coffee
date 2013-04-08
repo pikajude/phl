@@ -12,7 +12,7 @@ $(document)
 
 # delete a goal!
 .on("ajax:success", ".delete-goal", (evt, json, status, error) ->
-  $("#edit_goal_#{json.goal.id}, #delete-goal-#{json.goal.id}").remove())
+  $("#goal-#{json.goal.id}_edit_goal_#{json.goal.id}, #delete-goal-#{json.goal.id}").remove())
 
 # make the link (un)clickable!
 .on("change", "select[name=scorer_id]", ->
@@ -29,6 +29,11 @@ $(document)
 .on("change", "select.scorer, select.first-assist", ->
   $(this).parent("form").submit())
 
+# update time on change!
+.on("blur", "input.goal-time", ->
+  $(this).parent("form").submit())
+
 # re-render goals on change!
 .on("ajax:success", "form.edit_goal", (evt, json, status, error) ->
-  $(".goals").html(goal.tmpl for goal in json))
+  $(".goals").html(goal.tmpl for goal in json.goals)
+  $("#goal-#{json.updated}_edit_goal_#{json.updated}").effect "highlight", {}, 1000)

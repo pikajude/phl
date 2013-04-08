@@ -10,6 +10,7 @@ group :assets do
 end
 
 gem "jquery-rails"
+gem "jquery-ui-rails"
 gem "pg"
 gem "paperclip", "~> 3.0"
 gem "dalli"

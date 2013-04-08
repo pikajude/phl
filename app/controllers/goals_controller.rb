@@ -14,7 +14,7 @@ class GoalsController < ApplicationController
   def update
     @goal = Goal.find params[:id]
     @game = @goal.game
-    params[:goal].reject{|x|x.blank?}.each do |k,v|
+    params[:goal].reject{|_,v|v.blank?}.each do |k,v|
       case k
       when "time"
         @goal.time = v
@@ -29,10 +29,13 @@ class GoalsController < ApplicationController
       if @goal.save
         format.html { redirect_to new_report_path(@game) }
         format.json {
-          render json: @game.goals.map { |g|
-            g.attributes.merge({
-              tmpl: render_to_string(partial: "reports/goal", formats: [:html], locals: { goal: g })
-            })
+          render json: {
+            goals: @game.goals.map { |g|
+              g.attributes.merge({
+                tmpl: render_to_string(partial: "reports/goal", formats: [:html], locals: { goal: g })
+              })
+            },
+            updated: @goal.id
           }
         }
       else
