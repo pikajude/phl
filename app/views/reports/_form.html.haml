@@ -15,4 +15,4 @@
       = submit_tag "Goal+"
 .goals
   - @game.goals.order(:time).each do |goal|
-    = render partial: "goal", locals: { goal: goal, home: goal.team == @game.home_team }
+    = render partial: "goal", locals: { goal: goal }
