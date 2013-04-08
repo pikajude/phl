@@ -1,0 +1,4 @@
+- unless flash[:error].blank?
+  %ul
+    - flash[:error].full_messages.each do |err|
+      %li= err

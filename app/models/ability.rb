@@ -18,6 +18,9 @@ class Ability
       can :report, Game do |g|
         player.games.include?(g) && !g.reported
       end
+      can :manage, Goal do |g|
+        player.games.include?(g.game)
+      end
       can :read, Post
 
     when "agm"

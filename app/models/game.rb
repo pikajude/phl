@@ -56,8 +56,7 @@ class Game < ActiveRecord::Base
   end
 
   def update_points
-    self.home_team.update_points
-    self.away_team.update_points
+    Team.update_points
   end
   
   def update_seeds

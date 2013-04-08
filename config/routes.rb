@@ -2,6 +2,7 @@ Phl::Application.routes.draw do
   devise_for :players
 
   resources :trades
+  resources :goals
 
   get '/attend/:game'        => 'games#attend',       as: 'attend_game'
   get '/attendance/:game'    => 'games#attendance',   as: 'game_attendance'
@@ -15,6 +16,8 @@ Phl::Application.routes.draw do
 
   scope '/games/:id' do
     resource :report, path_names: { new: 'make' }
+    put '/report/goal' => 'reports#goal', as: 'add_goal_to_report'
+    put '/report/sub'  => 'reports#substitute', as: 'add_substitute_to_report'
   end
 
   root to: 'players#index'

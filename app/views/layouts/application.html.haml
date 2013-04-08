@@ -10,13 +10,13 @@
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
 
-  %body
+  %body{class: params[:controller]}
     %nav
       = link_to "PHL", root_path, id: "home"
       - if player_signed_in?
         Logged in as
         = colored_player_name current_player
-        |
+        %span.sep= "|"
         = link_to "Logout", destroy_player_session_path, method: :delete
       - else
         = link_to "Login", new_player_session_path

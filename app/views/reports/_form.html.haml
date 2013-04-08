@@ -1,8 +1,15 @@
-= form_for new_report_path(game) do |f|
-  %h2
-    = colored_team_name game.home_team, short: false
-    %span{id: "score-#{game.home_team.id}"}= game.home_score
-    \-
-    %span{id: "score-#{game.away_team.id}"}= game.away_score
-    = colored_team_name game.away_team, short: false
-  = f.submit "hi"
+%h2
+  = colored_team_name game.home_team, short: false, class: "home-team"
+  %span.home-team{id: "score-#{game.home_team.id}"}= game.home_score
+  \-
+  = colored_team_name game.away_team, short: false, class: "away-team"
+  %span.away-team{id: "score-#{game.away_team.id}"}= game.away_score
+.home-team
+  = form_tag add_goal_to_report_path(game, side: 'home'), method: :put, remote: true, class: "goal-form" do
+    = hidden_field :game, :id
+    = submit_tag "Add goal"
+.away-team
+  = form_tag add_goal_to_report_path(game, side: 'away'), method: :put, remote: true, class: "goal-form" do
+    = hidden_field :game, :id
+    = submit_tag "Add goal"
+.goals= render partial: "goal", collection: @game.goals, as: :goal

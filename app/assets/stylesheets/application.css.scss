@@ -58,8 +58,8 @@
 }
 
 #notice {
-  background-color: darken($win, 10);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(darken($win, 8)), to(darken($win, 12)));
+  background-color: #eee;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(lighten(#eee, 2)), to(darken(#eee, 2)));
 
   .close {
     color: darken($win, 70);
@@ -110,9 +110,12 @@ nav {
   color: white;
   font-size: 14px;
 
+  .sep {
+    color: #888;
+  }
+
   .colored_name {
     font-weight: bold;
-    margin: 0;
 
     &.dark {
       background: #eee;
@@ -155,3 +158,4 @@ nav {
 @import "players";
 @import "teams";
 @import "trades";
+@import "reports";
