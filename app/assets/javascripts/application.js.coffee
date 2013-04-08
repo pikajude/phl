@@ -25,10 +25,10 @@ $(document).ready ->
   $("#alert .close, #notice .close").on "click", ->
     $(this).parent().slideUp 400
 
-$(document).on "ajax:error", (evt, xhr, status, error) ->
-  debugger
-  errs = $.parseJSON(xhr.responseText).errors
-  $("<div id='error'>").append(
-    $("<ul>").append(
-      $.map errs, (err) ->
-        $("<li>").text err)).prependTo($("#content"))
+    # $(document).on "ajax:error", (evt, xhr, status, error) ->
+    #   debugger
+    #   errs = $.parseJSON(xhr.responseText).errors
+    #   $("<div id='error'>").append(
+    #     $("<ul>").append(
+    #       $.map errs, (err) ->
+    #         $("<li>").text err)).prependTo($("#content"))

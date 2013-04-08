@@ -3,6 +3,20 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .reports {
+  .buttons {
+    .home-team, .away-team {
+      padding: 10px 0;
+    }
+
+    .home-team {
+      float: left;
+    }
+
+    .away-team {
+      float: right;
+    }
+  }
+
   h2 {
     text-align: center;
 
@@ -11,6 +25,94 @@
     }
 
     .away-team {
+      float: right;
+    }
+  }
+
+  .goals {
+    clear: both;
+
+    & > div {
+      padding: 5px;
+      margin-bottom: 5px;
+      border-radius: 4px;
+      overflow: hidden;
+
+      .errors {
+        background: $loss;
+        border: 1px solid borderize($loss);
+        color: darken($loss, 70);
+        border-radius: 3px;
+        padding: 4px 8px;
+        float: right;
+        min-width: 40%;
+        
+        form {
+          display: block;
+        }
+
+        &:empty {
+          display: none;
+        }
+
+        li {
+          list-style-position: inside;
+        }
+      }
+
+      &.away .errors {
+        float: left;
+        text-align: left;
+      }
+    }
+
+    .away {
+      text-align: right;
+      background: #eee;
+
+      form {
+        text-align: left;
+      }
+    }
+
+    form {
+      display: inline-block;
+      overflow: hidden;
+
+      .field {
+        float: left;
+        margin: 0 3px;
+
+        input {
+          padding: 3px;
+          border-radius: 3px;
+          border: 1px solid #eee;
+        }
+
+        .problem {
+          border: 1px solid borderize($loss);
+          background: $loss;
+        }
+
+        label {
+          display: block;
+          font-size: 12px;
+        }
+
+        .goal-time {
+          width: 40px;
+        }
+
+        select {
+          width: 100px;
+        }
+      }
+    }
+
+    .delete-goal {
+      line-height: 34px;
+      vertical-align: 11px;
+      padding: 0 5px;
       float: right;
     }
   }

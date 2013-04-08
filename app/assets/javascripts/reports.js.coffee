@@ -2,17 +2,24 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+update_scores = ->
+  $("span.home-score").text($(".goals .home").length)
+  $("span.away-score").text($(".goals .away").length)
+
 $(document)
 # add a goal!
 .on("ajax:success", ".goal-form", (evt, json, status, error) ->
-  $(".goals").html(goal.tmpl for goal in json)
+  $(".goals").html(goal.tmpl for goal in json.goals)
+  $("#goal-#{json.updated}").effect("highlight", {}, 1000)
   $("select[name=scorer_id]").each ->
     $(this).children(":first-child").prop 'selected', true
-    $(this).change())
+    $(this).change()
+  update_scores())
 
 # delete a goal!
 .on("ajax:success", ".delete-goal", (evt, json, status, error) ->
-  $("#goal-#{json.goal.id}_edit_goal_#{json.goal.id}, #delete-goal-#{json.goal.id}").remove())
+  $(this).parent().remove()
+  update_scores())
 
 # make the link (un)clickable!
 .on("change", "select[name=scorer_id]", ->
@@ -27,13 +34,22 @@ $(document)
 
 # change scorers on submit!
 .on("change", "select.scorer, select.first-assist", ->
-  $(this).parent("form").submit())
+  $(this).parents("form").submit())
 
 # update time on change!
 .on("blur", "input.goal-time", ->
-  $(this).parent("form").submit())
+  $(this).parents("form").submit())
 
 # re-render goals on change!
 .on("ajax:success", "form.edit_goal", (evt, json, status, error) ->
   $(".goals").html(goal.tmpl for goal in json.goals)
-  $("#goal-#{json.updated}_edit_goal_#{json.updated}").effect "highlight", {}, 1000)
+  $("#goal-#{json.updated}").effect "highlight", {}, 1000
+  $("span#score-#{json.team}").text("hi")
+  update_scores())
+
+.on("ajax:error", "form.edit_goal", (evt, xhr, status, error) ->
+  json = $.parseJSON(xhr.responseText)
+  $.each json.errors, (_,k) ->
+    $("#goal-#{json.id}_goal_#{k}").addClass "problem"
+  $("#goal-#{json.id} ul").html($("<li>").text(msg) for msg in json.messages)
+  update_scores())

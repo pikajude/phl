@@ -9,15 +9,14 @@ class Game < ActiveRecord::Base
   has_many :substitutions
 
   validate :different_teams
-  before_save :update_scores
-  before_save :update_seeds
-  before_save :update_subs
+  before_save :update_seeds, if: :reported
+  before_save :update_subs, if: :reported
   before_save :update_stats, if: ->(t) {
-    t.substitutions.any?(&:changed?) || t.substitutions.count != t.substitution_count
+    (t.substitutions.any?(&:changed?) || t.substitutions.count != t.substitution_count) && t.reported
   }
-  before_save :update_substitution_count
-  before_save :update_overtime
-  after_save  :update_points
+  before_save :update_substitution_count, if: :reported
+  before_save :update_overtime, if: :reported
+  after_save  :update_points, if: :reported
 
   has_many :scheduled_attendances
   has_many :attending_players, through: :scheduled_attendances, source: :player
@@ -35,19 +34,6 @@ class Game < ActiveRecord::Base
   private
   def different_teams
     errors.add :home_team, "cannot be the same as away team" if self.home_team_id == self.away_team_id
-  end
-
-  def update_scores
-    self.home_score = 0
-    self.away_score = 0
-    home = self.home_team.id
-    self.goals.each do |goal|
-      if goal.team.id == home
-        self.home_score += 1
-      else
-        self.away_score += 1
-      end
-    end
   end
 
   def update_overtime

@@ -30,7 +30,7 @@ class GoalsController < ApplicationController
         format.html { redirect_to new_report_path(@game) }
         format.json {
           render json: {
-            goals: @game.goals.map { |g|
+            goals: @game.goals.order(:time).map { |g|
               g.attributes.merge({
                 tmpl: render_to_string(partial: "reports/goal", formats: [:html], locals: { goal: g })
               })
@@ -40,7 +40,13 @@ class GoalsController < ApplicationController
         }
       else
         format.html { redirect_to new_report_path(@game), error: @goal.errors.full_messages }
-        format.json { render json: { errors: @goal.errors.full_messages } }
+        format.json {
+          render json: {
+            errors: @goal.errors.keys,
+            messages: @goal.errors.full_messages,
+            id: @goal.id
+          }, status: 422
+        }
       end
     end
   end
