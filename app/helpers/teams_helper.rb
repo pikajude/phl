@@ -8,6 +8,9 @@ module TeamsHelper
             else
               "light"
             end
-    link_to team.send(short ? :short_name : :name), team_page_path(team.slug), class: "colored_name #{klass} #{opts[:class]}", style: "color: #{team.hex_color}"
+    link_to team.send(short ? :short_name : :name), team_page_path(team.slug), {
+      class: "colored_name #{klass} #{opts[:class]}",
+      style: "color: #{team.hex_color}"
+    }
   end
 end

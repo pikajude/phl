@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130408065738) do
+ActiveRecord::Schema.define(version: 20130408205552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,13 +72,17 @@ ActiveRecord::Schema.define(version: 20130408065738) do
     t.integer  "order"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "played_on",          default: '2013-04-04 02:34:06', null: false
+    t.datetime "played_on",           default: '2013-04-04 02:34:06', null: false
     t.integer  "week"
     t.integer  "day"
-    t.integer  "substitution_count", default: 0,                     null: false
-    t.boolean  "overtime",           default: false
-    t.boolean  "finished",           default: false,                 null: false
-    t.boolean  "reported",           default: false,                 null: false
+    t.integer  "substitution_count",  default: 0,                     null: false
+    t.boolean  "overtime",            default: false
+    t.boolean  "finished",            default: false,                 null: false
+    t.boolean  "reported",            default: false,                 null: false
+    t.integer  "current_activity_id"
+    t.datetime "current_activity"
+    t.integer  "last_activity_id"
+    t.datetime "last_activity"
   end
 
   create_table "goals", force: true do |t|
@@ -86,12 +90,12 @@ ActiveRecord::Schema.define(version: 20130408065738) do
     t.integer  "scorer_id"
     t.integer  "first_assist_id"
     t.integer  "second_assist_id"
-    t.integer  "half"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "team_id"
     t.integer  "scored_against"
     t.integer  "time",             default: 0
+    t.integer  "half",             default: 1, null: false
   end
 
   create_table "pick_proposals", force: true do |t|

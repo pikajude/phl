@@ -8,7 +8,11 @@ class Team < ActiveRecord::Base
   
   before_save :sluggify
 
-  has_attached_file :logo, styles: { retina: "1024x1024>", full: "512x512>", thumb: "128x128>" }
+  has_attached_file :logo, styles: {
+    retina: "1024x1024>",
+    full: "512x512>",
+    thumb: "128x128>"
+  }
 
   validates_numericality_of :color,
     greater_than_or_equal_to: 0,

@@ -7,10 +7,10 @@ group :assets do
   gem "sass-rails",   "~> 4.0.0.beta1"
   gem "coffee-rails", "~> 4.0.0.beta1"
   gem "uglifier", ">= 1.0.3"
+  gem "jquery-rails"
+  gem "jquery-ui-rails"
 end
 
-gem "jquery-rails"
-gem "jquery-ui-rails"
 gem "pg"
 gem "paperclip", "~> 3.0"
 gem "dalli"

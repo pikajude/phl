@@ -22,9 +22,11 @@ class ReportsController < ApplicationController
         format.html { redirect_to new_report_path(@game) }
         format.json {
           render json: {
-            goals: @goals.order(:time).map { |goal|
+            goals: @goals.by_time.map { |goal|
               goal.attributes.merge({
-                tmpl: render_to_string(partial: "reports/goal", formats: [:html], locals: { goal: goal })
+                tmpl: render_to_string(partial: "reports/goal",
+                                       formats: [:html],
+                                       locals: { goal: goal })
               })
             },
             updated: goal.id
@@ -43,5 +45,10 @@ class ReportsController < ApplicationController
   def load_game
     @game = Game.find_by(id: params[:id]) || not_found
     authorize! :report, @game
+    @game.last_activity = @game.current_activity
+    @game.last_activity_id = @game.current_activity_id
+    @game.current_activity = Time.zone.now
+    @game.current_activity_id = current_player.id
+    @game.save
   end
 end

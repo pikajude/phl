@@ -7,6 +7,9 @@ update_scores = ->
   $("span.away-score").text($(".goals .away").length)
 
 $(document)
+.ready ->
+  update_scores()
+
 # add a goal!
 .on("ajax:success", ".goal-form", (evt, json, status, error) ->
   $(".goals").html(goal.tmpl for goal in json.goals)
@@ -32,12 +35,12 @@ $(document)
     link.removeAttr("disabled")
       .attr "href", "/games/#{link.data("game-id")}/report/goal/#{player}")
 
-# change scorers on submit!
-.on("change", "select.scorer, select.first-assist", ->
+# update form on change!
+.on("blur", ".edit_goal input", ->
   $(this).parents("form").submit())
 
-# update time on change!
-.on("blur", "input.goal-time", ->
+# update form on change redux!
+.on("change", ".edit_goal select", ->
   $(this).parents("form").submit())
 
 # re-render goals on change!
@@ -49,6 +52,7 @@ $(document)
 
 .on("ajax:error", "form.edit_goal", (evt, xhr, status, error) ->
   json = $.parseJSON(xhr.responseText)
+  $("#goal-#{json.id} .problem").removeClass "problem"
   $.each json.errors, (_,k) ->
     $("#goal-#{json.id}_goal_#{k}").addClass "problem"
   $("#goal-#{json.id} ul").html($("<li>").text(msg) for msg in json.messages)

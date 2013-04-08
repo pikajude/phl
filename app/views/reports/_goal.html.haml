@@ -2,15 +2,19 @@
   = form_for goal, namespace: "goal-#{goal.id}", remote: true do |f|
     .field
       = f.label :time, "time"
-      = f.number_field :time, class: "goal-time"
+      = f.text_field :time, class: "goal-time", value: goal.readable_time
+
+    .field
+      = f.label :half, "half"
+      = f.number_field :half, class: "goal-half", min: 1, max: 3
   
     .field
       = f.label :scorer, "scored by"
-      = f.select :scorer, options_from_collection_for_select(goal.team.players.order(:username), :id, :username, (goal.scorer.id rescue nil)), { prompt: "nobody" }, { class: "scorer" }
+      = f.select :scorer, options_from_collection_for_select(goal.team.players.order(:username), :id, :username, (goal.scorer.id rescue nil)), { prompt: "(nobody)" }, { class: "scorer" }
   
     .field
       = f.label :first_assist, "assisted by"
-      = f.select :first_assist, options_from_collection_for_select(goal.team.players.order(:username).where('id != ?', (goal.scorer.id rescue 0)), :id, :username, goal.first_assist_id), { prompt: "nobody" }, { class: "first-assist" }
+      = f.select :first_assist, options_from_collection_for_select(goal.team.players.order(:username).where('id != ?', (goal.scorer.id rescue 0)), :id, :username, goal.first_assist_id), { include_blank: "(nobody)" }, { class: "first-assist" }
   
   = link_to goal_path(goal), method: :delete, id: "delete-goal-#{goal.id}", class: "delete-goal", remote: true do
     %span.icon-remove

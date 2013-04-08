@@ -12,7 +12,9 @@ class Game < ActiveRecord::Base
   before_save :update_seeds, if: :reported
   before_save :update_subs, if: :reported
   before_save :update_stats, if: ->(t) {
-    (t.substitutions.any?(&:changed?) || t.substitutions.count != t.substitution_count) && t.reported
+    (t.substitutions.any?(&:changed?) ||
+      t.substitutions.count != t.substitution_count) &&
+    t.reported
   }
   before_save :update_substitution_count, if: :reported
   before_save :update_overtime, if: :reported
@@ -33,7 +35,9 @@ class Game < ActiveRecord::Base
 
   private
   def different_teams
-    errors.add :home_team, "cannot be the same as away team" if self.home_team_id == self.away_team_id
+    if self.home_team_id == self.away_team_id
+      errors.add :home_team, "cannot be the same as away team"
+    end
   end
 
   def update_overtime
@@ -75,7 +79,9 @@ class Game < ActiveRecord::Base
        sub.off_time - sub.on_time
      end.sum.to_f / 60
      player.goals = Goal.where(scorer_id: player.id).count
-     player.assists = Goal.where('first_assist_id = ? OR second_assist_id = ?', player.id, player.id).count
+     player.assists = Goal.where('first_assist_id = ? OR second_assist_id = ?',
+                                 player.id,
+                                 player.id).count
      player.points = player.goals + player.assists
      player.goals_against = Goal.where(scored_against: player.id).count
      player.gaa = player.goals_against / player.minutes_played * 10

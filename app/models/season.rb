@@ -8,7 +8,8 @@ class Season < ActiveRecord::Base
 
   class << self
     def current
-      Season.where('end_date >= ?', Date.today).order('season_number DESC').first
+      Season.where('end_date >= ?', Date.today)
+        .order('season_number DESC').first
     end
 
     def current_week
@@ -71,12 +72,21 @@ class Season < ActiveRecord::Base
             order:     order,
             week:      week,
             day:       day,
-            played_on: season_start + (week - 1).weeks + (day - 1).days + (order * 15 + 1185).minutes
+            played_on: season_start +
+                       (week - 1).weeks +
+                       (day - 1).days +
+                       (order * 15 + 1185).minutes
           }
           if i.odd? && home == first
-            self.games.create!(opts.merge({ home_team_id: away, away_team_id: home }), without_protection: true)
+            self.games.create!(opts.merge({
+              home_team_id: away,
+              away_team_id: home
+            }), without_protection: true)
           else
-            self.games.create!(opts.merge({ home_team_id: home, away_team_id: away }), without_protection: true)
+            self.games.create!(opts.merge({
+              home_team_id: home,
+              away_team_id: away
+            }), without_protection: true)
           end
         end
         fixed = top.shift

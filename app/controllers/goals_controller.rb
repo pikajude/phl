@@ -14,14 +14,16 @@ class GoalsController < ApplicationController
   def update
     @goal = Goal.find params[:id]
     @game = @goal.game
-    params[:goal].reject{|_,v|v.blank?}.each do |k,v|
+    params[:goal].each do |k,v|
       case k
       when "time"
-        @goal.time = v
+        @goal.readable_time = v
       when "scorer"
-        @goal.scorer = Player.find v
+        @goal.scorer_id = v.blank? ? nil : v.to_i
       when "first_assist"
-        @goal.first_assist = Player.find v
+        @goal.first_assist_id = v.blank? ? nil : v.to_i
+      when "half"
+        @goal.half = v.to_i
       end
     end
 
@@ -30,16 +32,20 @@ class GoalsController < ApplicationController
         format.html { redirect_to new_report_path(@game) }
         format.json {
           render json: {
-            goals: @game.goals.order(:time).map { |g|
+            goals: @game.goals.by_time.map { |g|
               g.attributes.merge({
-                tmpl: render_to_string(partial: "reports/goal", formats: [:html], locals: { goal: g })
+                tmpl: render_to_string(partial: "reports/goal",
+                                       formats: [:html],
+                                       locals: { goal: g })
               })
             },
             updated: @goal.id
           }
         }
       else
-        format.html { redirect_to new_report_path(@game), error: @goal.errors.full_messages }
+        format.html {
+          redirect_to new_report_path(@game), error: @goal.errors.full_messages
+        }
         format.json {
           render json: {
             errors: @goal.errors.keys,

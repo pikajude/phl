@@ -14,5 +14,5 @@
       = hidden_field :game, :id
       = submit_tag "Goal+"
 .goals
-  - @game.goals.order(:time).each do |goal|
+  - @game.goals.by_time.each do |goal|
     = render partial: "goal", locals: { goal: goal }
