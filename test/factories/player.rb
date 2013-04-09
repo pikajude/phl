@@ -10,6 +10,7 @@ FactoryGirl.define do
     rep 0
     role "player"
     email { generate(:email) }
+    confirmed_at { Time.now }
     password "password"
     points 0
     goals 0
