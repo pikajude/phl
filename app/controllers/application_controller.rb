@@ -10,4 +10,8 @@ class ApplicationController < ActionController::Base
   def not_found
     raise ActionController::RoutingError.new("Not found")
   end
+
+  rescue_from CanCan::AccessDenied do |exc|
+    redirect_to :root, alert: exc.message
+  end
 end
