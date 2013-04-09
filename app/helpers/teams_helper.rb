@@ -3,7 +3,7 @@ module TeamsHelper
     klass = case team.brightness
             when 0..0.3
               "dark"
-            when 0.3..0.7
+            when 0.3..0.8
               "medium"
             else
               "light"
