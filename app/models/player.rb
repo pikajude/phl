@@ -14,7 +14,6 @@ class Player < ActiveRecord::Base
   has_many :forum_threads
   has_many :scheduled_attendances
   has_many :substitutions, foreign_key: :player_on_id
-  has_many :games, through: :substitutions
   has_many :player_proposals
   has_many :trades, through: :player_proposals
   has_many :dashboard_boxes
@@ -22,6 +21,10 @@ class Player < ActiveRecord::Base
   belongs_to :team
 
   after_create :default_boxes
+
+  def games
+    self.team.games
+  end
 
   def color
     self.team.color rescue 0xffffff

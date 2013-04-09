@@ -10,7 +10,6 @@ class Game < ActiveRecord::Base
 
   validate :different_teams
   before_save :update_seeds, if: :reported
-  before_save :update_subs, if: :reported
   before_save :update_stats, if: ->(t) {
     (t.substitutions.any?(&:changed?) ||
       t.substitutions.count != t.substitution_count) &&
@@ -55,21 +54,6 @@ class Game < ActiveRecord::Base
     Team.order('points DESC, LOWER(name) ASC').each_with_index do |team,i|
       team.seed = i + 1
       team.save
-    end
-  end
-
-  def update_subs
-    if self.substitutions.empty?
-      %w[home_team away_team].each do |team|
-        self.send(team).players.each do |p|
-          s = self.substitutions.new
-          s.player = p
-          s.team = p.team
-          s.on_time = 0
-          s.off_time = 600
-          s.save
-        end
-      end
     end
   end
 
