@@ -1,5 +1,6 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('integration_helper.rb', File.dirname(__FILE__))
 require 'rails/test_help'
 require 'capybara/rails'
 
@@ -19,11 +20,4 @@ class ActionDispatch::IntegrationTest
   include Capybara::DSL
 
   FactoryGirl.create :season
-
-  def login_as user
-    visit '/players/sign_in'
-    fill_in 'player_username', with: user.username
-    fill_in 'player_password', with: 'password'
-    click_button 'Sign in'
-  end
 end
