@@ -19,5 +19,7 @@ end
 class ActionDispatch::IntegrationTest
   include Capybara::DSL
 
+  Capybara.default_driver = :webkit
+
   FactoryGirl.create :season
 end

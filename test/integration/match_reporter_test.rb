@@ -10,10 +10,6 @@ class MatchReporterTest < ActionDispatch::IntegrationTest
     @other_gm = Player.where("role = 'gm' AND team_id NOT IN (?)", [@game.home_team.id, @game.away_team.id]).first
   end
   
-  teardown do
-    logout
-  end
-  
   test "rejects unauthorized users" do
     get new_report_path(@game)
     assert_redirected_to '/'
