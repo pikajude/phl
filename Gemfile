@@ -11,6 +11,15 @@ group :assets do
   gem "jquery-ui-rails"
 end
 
+group :test do
+  gem 'turn'
+  gem 'capybara'
+  gem 'capybara-webkit'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'factory_girl_rails'
+end
+
 gem "pg"
 gem "paperclip", "~> 3.0"
 gem "dalli"

@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  season: 1
-  division: 1
-
-two:
-  season: 1
-  division: 1

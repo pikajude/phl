@@ -22,7 +22,7 @@ class Goal < ActiveRecord::Base
   validates_numericality_of :time, greater_than_or_equal_to: 0
   validates_inclusion_of :half, in: 1..3, message: "isn't a valid half"
 
-  scope :by_time, order(:half, :time)
+  scope :by_time, -> { order(:half, :time) }
 
   def reported?
     self.game.reported
