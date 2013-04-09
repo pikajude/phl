@@ -36,12 +36,11 @@
         %span.seed= a.seed.to_s.rjust(2, "0")
         = colored_team_name a
         %span.score= game.away_score
-      %h4
-        - if game.reported
-          = link_to "See match report", report_path(game)
-        - else
-          - if can? :report, game
-            = link_to "Report match", new_report_path(game)
+      - if game.reported
+        %h4= link_to "See match report", report_path(game)
+      - elsif can? :report, game
+        %h4
+          = link_to "Report match", new_report_path(game)
           - if game.missing_report?
             %span.tooltip.icon-exclamation-sign.no-report-warning{title: "Games without match reports are counted as a forfeit loss for both teams!"}
 
