@@ -3,6 +3,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require File.expand_path('integration_helper.rb', File.dirname(__FILE__))
 require 'rails/test_help'
 require 'capybara/rails'
+require 'minitest/autorun'
 
 class ActiveSupport::TestCase
   ActiveRecord::Migration.check_pending!
@@ -18,6 +19,8 @@ end
 
 class ActionDispatch::IntegrationTest
   include Capybara::DSL
+  extend Shoulda::Context::ClassMethods
+  include Shoulda::Context::InstanceMethods
 
   Capybara.default_driver = :webkit
 

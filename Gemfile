@@ -15,9 +15,9 @@ group :test do
   gem 'turn'
   gem 'capybara'
   gem 'capybara-webkit'
-  gem 'rspec-rails'
-  gem 'shoulda-matchers'
+  gem 'test-unit'
   gem 'factory_girl_rails'
+  gem 'shoulda'
 end
 
 gem "pg"
