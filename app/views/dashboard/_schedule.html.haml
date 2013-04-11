@@ -31,11 +31,11 @@
       %h3
         %span.seed= h.seed.to_s.rjust(2, "0")
         = colored_team_name h
-        %span.score= game.home_score
+        %span.score= game.reported ? game.home_score : 0
       %h3
         %span.seed= a.seed.to_s.rjust(2, "0")
         = colored_team_name a
-        %span.score= game.away_score
+        %span.score= game.reported ? game.away_score : 0
       - if game.reported
         %h4= link_to "See match report", report_path(game)
       - elsif can? :report, game

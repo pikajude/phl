@@ -14,7 +14,7 @@ class GamesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to :root }
-      format.js
+      format.json { render json: { attending: @attending } }
     end
   end
 
@@ -22,9 +22,9 @@ class GamesController < ApplicationController
     @game = Game.find params[:game]
     @team = current_player.team
     @coming = @game.attending_players.where(team_id: @team.id)
-    
+
     respond_to do |format|
-      format.js
+      format.json { render json: @coming }
     end
   end
 end

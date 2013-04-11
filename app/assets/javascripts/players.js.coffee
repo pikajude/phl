@@ -3,17 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
-  $(document).on {
-    mouseover: -> $(this).html "not coming",
-    mouseout: -> $(this).html "coming"
-  }, ".game-attendance .button.green"
-  $(document).on {
-    mouseover: -> $(this).html "coming",
-    mouseout: -> $(this).html "not coming"
-  }, ".game-attendance .button.red"
-  $(document).on "click", ".game-attendance .button", ->
-    $(this).parent().children('i').removeClass('hidden')
-
   unshade = (el) ->
     shade = $(el).parent().find(".shade")
     child = $(el).find("> *:first-child")
@@ -24,8 +13,32 @@ $ ->
 
   $(".dashboard-item").each (_ix,el) -> unshade el
 
-  $(document).on "ajax:before", "#attendance-link.open", (e) ->
-    e.preventDefault()
-    $(this).removeClass("open").addClass("closed")
-    $(".attendance").slideUp 300, -> $(this).html("")
-    false
+$(document).on({
+  mouseover: -> $(this).html "not coming",
+  mouseout: -> $(this).html "coming"
+}, ".game-attendance .button.green")
+
+.on({
+  mouseover: -> $(this).html "coming",
+  mouseout: -> $(this).html "not coming"
+}, ".game-attendance .button.red")
+
+.on("click", ".game-attendance .button", ->
+  $(this).parent().children('i').removeClass('hidden'))
+
+.on("ajax:before", "#attendance-link.open", (e) ->
+  $(this).removeClass("open").addClass("closed")
+  $(".attendance").slideUp 300, -> $(this).html("")
+  false)
+
+.on("ajax:success", ".game-attendance .button", (evt, json, status, error) ->
+  $(this).removeClass(if json.attending then "red" else "green")
+    .addClass(if json.attending then "green" else "red")
+    .html(if json.attending then "coming" else "not coming")
+    .parent()
+    .removeClass(if json.attending then "no" else "yes")
+    .addClass(if json.attending then "yes" else "no")
+    .children("i").addClass("hidden"))
+
+.on("ajax:success", "#attendance-link.closed", (evt, json, status, error) ->
+  debugger)
