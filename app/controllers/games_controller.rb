@@ -24,7 +24,16 @@ class GamesController < ApplicationController
     @coming = @game.attending_players.where(team_id: @team.id)
 
     respond_to do |format|
-      format.json { render json: @coming }
+      format.json {
+        render json: {
+          players: @coming.map { |player|
+            player.as_json(only: [:id, :username])
+          },
+          tmpl: render_to_string(partial: "games/attendance",
+                                 formats: [:html],
+                                 locals: { players: @coming })
+        }
+      }
     end
   end
 end

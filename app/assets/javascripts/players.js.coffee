@@ -41,4 +41,6 @@ $(document).on({
     .children("i").addClass("hidden"))
 
 .on("ajax:success", "#attendance-link.closed", (evt, json, status, error) ->
-  debugger)
+  $(".attendance").html(json.tmpl)
+    .slideDown(300)
+  $("#attendance-link").removeClass("closed").addClass("open"))

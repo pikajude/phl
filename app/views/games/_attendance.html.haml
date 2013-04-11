@@ -1,4 +1,4 @@
-- if @coming.empty?
+- if players.empty?
   Ain't nobody!
 - else
-  = @coming.map(&:username).join(", ")
+  = players.map(&:username).join(", ")
