@@ -9,15 +9,17 @@ group :assets do
   gem "uglifier", ">= 1.0.3"
   gem "jquery-rails"
   gem "jquery-ui-rails"
+  gem "underscore-rails"
 end
 
 group :test do
-  gem 'turn'
-  gem 'capybara'
-  gem 'capybara-webkit'
-  gem 'test-unit'
-  gem 'factory_girl_rails'
-  gem 'shoulda'
+  gem "turn"
+  gem "capybara"
+  gem "capybara-webkit"
+  gem "test-unit"
+  gem "factory_girl_rails"
+  gem "shoulda"
+  gem "faker"
 end
 
 gem "pg"

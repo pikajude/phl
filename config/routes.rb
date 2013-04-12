@@ -15,6 +15,7 @@ Phl::Application.routes.draw do
   delete '/boxes/:id/delete' => 'players#delete_box', as: 'delete_box'
 
   scope '/games/:id' do
+    get '/substitutions' => 'games#substitutions'
     resource :report, path_names: { new: 'make' }
     put '/report/goal' => 'reports#goal', as: 'add_goal_to_report'
     put '/report/sub'  => 'reports#substitute', as: 'add_substitute_to_report'

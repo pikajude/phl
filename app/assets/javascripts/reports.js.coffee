@@ -9,6 +9,20 @@ update_scores = ->
 $(document)
 .ready ->
   update_scores()
+  $("li.player").draggable {
+    revert: true,
+    revertDuration: 0
+  }
+  $("li.position").droppable {
+    accept: "li.player",
+    hoverClass: "hovered",
+    drop: (event, ui) ->
+      $(this).html ui.draggable.text()
+      $(this).addClass "hovered"
+      $(".substitutions .position-#{$(this).data "position"}").css {
+        background: "yellow"
+      }
+  }
 
 # add a goal!
 .on("ajax:success", ".goal-form", (evt, json, status, error) ->

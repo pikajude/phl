@@ -1,5 +1,7 @@
+require 'faker'
+
 FactoryGirl.define do
-  sequence(:username) { |n| "user_#{n}" }
+  sequence(:username) { |n| "#{Faker::Name.name.parameterize}_#{n}" }
   sequence(:email) { |n| "user_#{n}@example.com" }
 
   factory :player do

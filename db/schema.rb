@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130409195721) do
+ActiveRecord::Schema.define(version: 20130412063225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,7 +113,6 @@ ActiveRecord::Schema.define(version: 20130409195721) do
   end
 
   create_table "players", force: true do |t|
-    t.string   "username",               limit: 16
     t.integer  "team_id"
     t.string   "signature",              limit: 5000
     t.string   "title",                  limit: 32
@@ -149,6 +148,7 @@ ActiveRecord::Schema.define(version: 20130409195721) do
     t.float    "gaa",                                 default: 0.0
     t.float    "ppg",                                 default: 0.0
     t.float    "minutes_played",                      default: 0.0
+    t.string   "username",                                          null: false
   end
 
   add_index "players", ["confirmation_token"], name: "index_players_on_confirmation_token", unique: true
@@ -184,13 +184,12 @@ ActiveRecord::Schema.define(version: 20130409195721) do
 
   create_table "substitutions", force: true do |t|
     t.integer  "game_id"
-    t.integer  "player_on_id"
-    t.integer  "player_off_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "on_time"
     t.integer  "off_time"
     t.integer  "team_id"
+    t.integer  "player_id"
   end
 
   create_table "teams", force: true do |t|

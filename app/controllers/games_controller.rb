@@ -36,4 +36,14 @@ class GamesController < ApplicationController
       }
     end
   end
+
+  def substitutions
+    @game = Game.find params[:id]
+
+    respond_to do |format|
+      format.json {
+        render json: @game.substitutions.to_json(root: false)
+      }
+    end
+  end
 end

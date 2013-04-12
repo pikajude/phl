@@ -1,1 +1,33 @@
-= render partial: 'form', locals: { game: @game }
+.team
+  %ul
+    - @game.home_team.players.each do |player|
+      %li.player{"data-player-id" => player.id}= player.username
+  %h2= colored_team_name @game.home_team
+
+#match-reporter
+  %ul.overlay
+    %li.position.gk{"data-position" => 1} GK
+    %li.position{"data-position" => 2} Player
+    %li.position{"data-position" => 3} Player
+    %li.position{"data-position" => 4} Player
+    %li.space
+    %li.position{"data-position" => 5} Player
+    %li.position{"data-position" => 6} Player
+    %li.position{"data-position" => 7} Player
+    %li.position.gk{"data-position" => 8} GK
+  %ul.substitutions
+    %li.position-1
+    %li.position-2
+    %li.position-3
+    %li.position-4
+    %li.space
+    %li.position-5
+    %li.position-6
+    %li.position-7
+    %li.position-8
+
+.team
+  %h2= colored_team_name @game.away_team
+  %ul
+    - @game.away_team.players.each do |player|
+      %li.player{"data-player-id" => player.id}= player.username
