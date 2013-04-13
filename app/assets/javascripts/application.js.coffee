@@ -17,7 +17,9 @@
 #= require jquery.ui.droppable
 #= require turbolinks
 #= require underscore
+#= require angular
 #= require jquery.tipsy
+#= require angular-dragdrop
 #= require_tree .
 
 $.ajaxSettings.dataType = "json"

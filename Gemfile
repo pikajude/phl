@@ -10,6 +10,7 @@ group :assets do
   gem "jquery-rails"
   gem "jquery-ui-rails"
   gem "underscore-rails"
+  gem "angularjs-rails"
 end
 
 group :test do

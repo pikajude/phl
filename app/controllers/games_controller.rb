@@ -26,9 +26,7 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.json {
         render json: {
-          players: @coming.map { |player|
-            player.as_json(only: [:id, :username])
-          },
+          players: @coming,
           tmpl: render_to_string(partial: "games/attendance",
                                  formats: [:html],
                                  locals: { players: @coming })
@@ -42,7 +40,7 @@ class GamesController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render json: @game.substitutions.to_json(root: false)
+        render json: @game.partitioned_substitutions.to_json(root: false, include: :player)
       }
     end
   end

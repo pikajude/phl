@@ -32,6 +32,21 @@ class Game < ActiveRecord::Base
     !self.reported && self.should_have_report?
   end
 
+  # this part is fun
+  def partitioned_substitutions
+    Hash[self.substitutions.
+      where(replaces_id: nil).
+      map do |sub|
+        sub.replacements
+      end.
+      group_by do |sublist|
+        sublist.first.team_id
+      end.
+      map do |team_id, subs|
+        [team_id, subs.group_by{|s|s.first.gk ? :gk : :player}]
+      end]
+  end
+
   private
   def different_teams
     if self.home_team_id == self.away_team_id
