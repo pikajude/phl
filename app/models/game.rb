@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  REPORT_GRACE_PERIOD = 3.hours
+  REPORT_GRACE_PERIOD = 2.hours
 
   belongs_to :season
   belongs_to :home_team, class_name: :Team
