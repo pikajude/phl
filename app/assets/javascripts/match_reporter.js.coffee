@@ -20,7 +20,7 @@ window.MatchReporter = ($scope) ->
     pos = $(event.target).position()
     $("li.player").unbind "drag"
     $("li.player").on "drag", (event2, ui2) ->
-      offs = ui2.offset.left - pos.left - 16
+      offs = ui2.offset.left - pos.left - 64
       $(event.target).find("div:first-child").css({width: "#{offs}px"})
 
   $scope.undetectDrop = (event, ui) ->
@@ -29,9 +29,9 @@ window.MatchReporter = ($scope) ->
     $(event.target).find("div:first-child").css({width: "100%"})
 
   $scope.performDrop = (event, ui) ->
-    offset = ui.offset.left - $(event.target).position().left - 16
+    offset = ui.offset.left - $(event.target).position().left - 64
     fullsize = $(event.target).width()
-    alert(offset / fullsize)
+    console.log(offset / fullsize)
 
   angular.element("li.player").draggable {
     opacity: 0.4,
@@ -39,7 +39,7 @@ window.MatchReporter = ($scope) ->
     start: -> $(this).addClass("dragging"),
     stop: -> $(this).removeClass("dragging")
   }
-  angular.element("#match-reporter li").droppable {
+  angular.element("ul.positions li").droppable {
     over: $scope.detectDrop,
     out: $scope.undetectDrop,
     drop: (event, ui) ->

@@ -66,6 +66,36 @@
     &:hover, &.dragging {
       background: #cccc88;
     }
+
+    &.dragging {
+      position: relative;
+      z-index: 9999;
+    }
+  }
+
+  #match-reporter {
+    position: relative;
+
+    ul.floating {
+      width: 50px;
+      position: absolute;
+      left: 0;
+      top: -5px;
+      bottom: -5px;
+      padding-top: 5px;
+      background: rgba(0,0,0,0.7);
+
+      li {
+        padding: 5px;
+        box-sizing: border-box;
+        color: white;
+        text-align: center;
+      }
+    }
+
+    ul.positions {
+      padding-left: 54px;
+    }
   }
 }
 

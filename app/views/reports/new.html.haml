@@ -7,7 +7,17 @@
     %h2= colored_team_name @game.home_team
 
   #match-reporter{"data-game-id" => @game.id}
-    %ul.floating.positions
+    %ul.floating
+      %li GK
+      %li Player
+      %li Player
+      %li Player
+      %li
+      %li Player
+      %li Player
+      %li Player
+      %li GK
+    %ul.positions
       %li{"ng-bind-html-unsafe" => "substitution('gk',     #{@game.home_team_id}, 0)", "data-position" => "gk"    , "data-team-id" => @game.home_team_id, "data-reporter-index" => 0}
       %li{"ng-bind-html-unsafe" => "substitution('player', #{@game.home_team_id}, 0)", "data-position" => "player", "data-team-id" => @game.home_team_id, "data-reporter-index" => 0}
       %li{"ng-bind-html-unsafe" => "substitution('player', #{@game.home_team_id}, 1)", "data-position" => "player", "data-team-id" => @game.home_team_id, "data-reporter-index" => 1}
