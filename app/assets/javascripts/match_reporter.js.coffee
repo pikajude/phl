@@ -21,31 +21,31 @@ window.MatchReporter = ($scope) ->
       lastBefore = $scope.lastBefore(ui2.offset.left, event)
       offs = ui2.offset.left - (if lastBefore.length == 0 then 0 else lastBefore.offset().left)
       if $(event.target).data("team-id") == ui.draggable.data("team-id") && ui.draggable.data("player-id") != lastBefore.data("player-id")
-        $(event.target).removeClass("invalid")
+        $(".invalid").removeClass("invalid")
         $(event.target).find("div").each ->
           $(this).find("span").css({width: $(this).data("width") + "px"})
         lastBefore.find("span").css({width: "#{offs}px"})
       else
-        $(event.target).addClass("invalid")
+        lastBefore.addClass("invalid")
 
-  $scope.undetectDrop = (event, ui) ->
+  $scope.undetectDrop = (event, ui, droppingAfterward) ->
     if $scope.bound == event.target
       $("li.player").unbind "drag"
     $(event.target).find("div").each ->
       $(this).find("span").css({width: $(this).data("width") + "px"})
-    $(event.target).removeClass("invalid")
+    unless droppingAfterward
+      $(event.target).removeClass("invalid")
 
   $scope.performDrop = (event, ui) ->
-    if $(event.target).data("team-id") == ui.draggable.data("team-id")
-      console.log "yay"
+    if $(event.target).data("team-id") == ui.draggable.data("team-id") && $(event.target).find("div.invalid").length == 0
       offset = ui.offset.left - $(event.target).offset().left
       $scope.addSubstitutionAfter(offset, event, ui)
     else
-      console.log "no"
+      $(".invalid").removeClass("invalid")
 
   $scope.lastBefore = (pos, event) ->
     kids = $.makeArray($(event.target).find("div")).reverse()
-    $(_.find kids, (elem) -> $(elem).offset().left < pos)
+    $(_.find kids, (elem) -> $(elem).position().left - 55 < pos)
 
   $scope.firstAfter = (pos, event) ->
     kids = $.makeArray($(event.target).find("div"))
@@ -87,11 +87,11 @@ window.MatchReporter = ($scope) ->
     over: $scope.detectDrop,
     out: $scope.undetectDrop,
     drop: (event, ui) ->
-      $scope.undetectDrop(event, ui)
+      $scope.undetectDrop(event, ui, true)
       $scope.performDrop(event, ui)
   }
 
-  genColor = (a, b) -> (b ^ a) % 16
+  genColor = (a, b) -> (b ^ a) % 12
 
   $scope.substitution = (pos, side, idx) ->
     if $scope.subs

@@ -15,7 +15,7 @@
   li {
     list-style-type: none;
     margin-bottom: 5px;
-    min-height: 20px;
+    height: 27px;
     overflow: hidden;
 
     div {
@@ -64,6 +64,22 @@
     background: #ffc798;
   }
 
+  .sub-color-8 span {
+    background: #ddff98;
+  }
+
+  .sub-color-9 span {
+    background: #98ff98;
+  }
+
+  .sub-color-10 span {
+    background: #ff9898;
+  }
+
+  .sub-color-11 span {
+    background: #ff98d2;
+  }
+
   li.player {
     cursor: pointer;
     border-radius: 3px;
@@ -106,6 +122,7 @@
 
       li.time {
         color: #eee;
+        height: 20px;
         padding-top: 5px;
         padding-bottom: 2px;
         margin-left: -55px;
@@ -113,7 +130,7 @@
         background: #454545;
       }
 
-      li.invalid div span {
+      li div.invalid span {
         background: #f88;
         color: white;
       }
