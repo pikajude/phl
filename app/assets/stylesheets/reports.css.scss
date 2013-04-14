@@ -2,8 +2,71 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.hovered {
-  background: yellow;
+.reports {
+  #content {
+    padding: 0 20px;
+  
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+  }
+
+  li {
+    list-style-type: none;
+    margin-bottom: 5px;
+    min-height: 20px;
+  }
+
+  li div {
+    border-radius: 3px;
+    padding: 5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .sub-color-0 {
+    background: #b9a4ff;
+  }
+
+  .sub-color-1 {
+    background: #dc9dff;
+  }
+
+  .sub-color-2 {
+    background: #ffff98;
+  }
+
+  .sub-color-3 {
+    background: #ffed98;
+  }
+
+  .sub-color-4 {
+    background: #98ffff;
+  }
+
+  .sub-color-5 {
+    background: #a3bfff;
+  }
+
+  .sub-color-6 {
+    background: #ffdd98;
+  }
+
+  .sub-color-7 {
+    background: #ffc798;
+  }
+
+  li.player {
+    cursor: pointer;
+    border-radius: 3px;
+    display: inline-block;
+
+    &:hover, &.dragging {
+      background: #cccc88;
+    }
+  }
 }
 
 .reports {

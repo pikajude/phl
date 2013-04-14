@@ -24,7 +24,7 @@ class Player < ActiveRecord::Base
 
   def serializable_hash options = {}
     options = {
-      only: [:team_id, :signature, :title, :rep, :role, :email,
+      only: [:id, :team_id, :signature, :title, :rep, :role, :email,
              :avatar_file_name, :points, :goals, :assists, :goals_against,
              :gaa, :ppg, :minutes_played, :username]
     }.update(options)

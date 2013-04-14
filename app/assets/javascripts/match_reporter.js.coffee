@@ -14,20 +14,47 @@ window.MatchReporter = ($scope) ->
       $scope.$apply ->
   }
 
-  $scope.tryDrop = (event, ui) ->
-    debugger
+  $scope.detectDrop = (event, ui) ->
+    $scope.bound = event.target
+    self = event.target
+    pos = $(event.target).position()
+    $("li.player").unbind "drag"
+    $("li.player").on "drag", (event2, ui2) ->
+      offs = ui2.offset.left - pos.left - 16
+      $(event.target).find("div:first-child").css({width: "#{offs}px"})
 
-  angular.element("li.player").draggable({revert: true})
-  angular.element("#match-reporter li").droppable {
-    drop: $scope.tryDrop
+  $scope.undetectDrop = (event, ui) ->
+    if $scope.bound == event.target
+      $("li.player").unbind "drag"
+    $(event.target).find("div:first-child").css({width: "100%"})
+
+  $scope.performDrop = (event, ui) ->
+    offset = ui.offset.left - $(event.target).position().left - 16
+    fullsize = $(event.target).width()
+    alert(offset / fullsize)
+
+  angular.element("li.player").draggable {
+    opacity: 0.4,
+    revert: true,
+    start: -> $(this).addClass("dragging"),
+    stop: -> $(this).removeClass("dragging")
   }
+  angular.element("#match-reporter li").droppable {
+    over: $scope.detectDrop,
+    out: $scope.undetectDrop,
+    drop: (event, ui) ->
+      $scope.undetectDrop(event, ui)
+      $scope.performDrop(event, ui)
+  }
+
+  genColor = (a, b) -> (b ^ a) % 16
 
   $scope.substitution = (pos, side, idx) ->
     if $scope.subs
       subs = $scope.subs[side][pos][idx]
       ("""
-        <div style='width: #{(sub.off_time - sub.on_time) / $scope.game.length * 100}%'>
-          hi
+      <div class='sub-color-#{genColor(side, sub.player.id)}' style='width: #{(sub.off_time - sub.on_time) / $scope.game.length * 100}%'>
+          #{sub.player.username} 
         </div>
       """ for sub in subs).join ""
     else
