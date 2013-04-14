@@ -39,7 +39,7 @@ window.MatchReporter = ($scope) ->
     start: -> $(this).addClass("dragging"),
     stop: -> $(this).removeClass("dragging")
   }
-  angular.element("ul.positions li").droppable {
+  angular.element("ul.positions li.spot").droppable {
     over: $scope.detectDrop,
     out: $scope.undetectDrop,
     drop: (event, ui) ->

@@ -24,6 +24,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    box-sizing: border-box;
   }
 
   .sub-color-0 {
@@ -80,8 +81,8 @@
       width: 50px;
       position: absolute;
       left: 0;
-      top: -5px;
-      bottom: -5px;
+      top: 27px;
+      bottom: 0;
       padding-top: 5px;
       background: rgba(0,0,0,0.7);
 
@@ -94,7 +95,17 @@
     }
 
     ul.positions {
-      padding-left: 54px;
+      padding: 0 5px 1px 54px;
+      background: #eee;
+
+      li.time {
+        color: #eee;
+        padding-top: 5px;
+        padding-bottom: 2px;
+        margin-left: -54px;
+        padding-left: 54px;
+        background: #454545;
+      }
     }
   }
 }
