@@ -12,6 +12,7 @@ window.MatchReporter = ($scope) ->
     success: (data, status, xhr) ->
       $scope.subs = data
       $scope.$apply ->
+      $scope.bindResizes()
   }
 
   $scope.detectDrop = (event, ui) ->
@@ -75,6 +76,7 @@ window.MatchReporter = ($scope) ->
       success: (data, status, xhr) ->
         $scope.subs = data
         $scope.$apply ->
+        $scope.bindResizes()
     }
 
   angular.element("li.player").draggable {
@@ -90,6 +92,29 @@ window.MatchReporter = ($scope) ->
       $scope.undetectDrop(event, ui, true)
       $scope.performDrop(event, ui)
   }
+
+  $scope.bindResizes = ->
+    _.each angular.element("li.spot span"), (e) ->
+      $(e).resizable {
+        handles: "e",
+        maxWidth: parseInt($(e).css("width")),
+        stop: (event, ui) -> $scope.updateSingle(event)
+      }
+
+  $scope.updateSingle = (event) ->
+    span = $(event.target)
+    parent = span.parent("div")
+    opts = {
+      on_time: (span.position().left - 55) / 2,
+      off_time: (span.position().left + span.width() - 55) / 2,
+      id: parent.data("sub-id")
+    }
+    $.ajax "/games/#{$scope.game.id}/substitution", {
+      data: { substitution: opts },
+      type: "PUT",
+      success: (data, status, xhr) ->
+        debugger
+    }
 
   genColor = (a, b) -> (b ^ a) % 12
 

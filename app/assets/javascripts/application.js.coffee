@@ -15,6 +15,7 @@
 #= require jquery.ui.effect.all
 #= require jquery.ui.draggable
 #= require jquery.ui.droppable
+#= require jquery.ui.resizable
 #= require turbolinks
 #= require underscore
 #= require angular

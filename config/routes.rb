@@ -20,6 +20,7 @@ Phl::Application.routes.draw do
     get '/substitutions' => 'games#substitutions'
     resource :report, path_names: { new: 'make' }
     put '/substitute' => 'games#substitute'
+    put '/substitution' => 'games#update_substitution'
   end
 
   root to: 'players#index'
