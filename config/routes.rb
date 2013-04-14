@@ -19,8 +19,7 @@ Phl::Application.routes.draw do
   scope '/games/:id' do
     get '/substitutions' => 'games#substitutions'
     resource :report, path_names: { new: 'make' }
-    put '/report/goal' => 'reports#goal', as: 'add_goal_to_report'
-    put '/report/sub'  => 'reports#substitute', as: 'add_substitute_to_report'
+    put '/substitute' => 'games#substitute'
   end
 
   root to: 'players#index'

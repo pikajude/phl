@@ -2,7 +2,7 @@
   .team
     %ul
       - @game.home_team.players.each do |player|
-        %li.player{"data-player-id" => player.id, "data-drag" => "true", "jqyoui-draggable" => "{animate:true}"}
+        %li.player{"data-player-id" => player.id, "data-team-id" => @game.home_team_id, "data-drag" => "true", "jqyoui-draggable" => "{animate:true}"}
           %div= player.username
     %h2= colored_team_name @game.home_team
 
@@ -36,5 +36,5 @@
     %h2= colored_team_name @game.away_team
     %ul
       - @game.away_team.players.each do |player|
-        %li.player{"data-player-id" => player.id, "data-drag" => "true", "jqyoui-draggable" => "{animate:true}"}
+        %li.player{"data-player-id" => player.id, "data-team-id" => @game.away_team_id, "data-drag" => "true", "jqyoui-draggable" => "{animate:true}"}
           %div= player.username

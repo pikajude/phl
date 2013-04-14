@@ -9,6 +9,33 @@ class GamesController < ApplicationController
     end
   end
 
+  def substitute
+    @game = Game.find_by(id: params[:id]) || not_found
+    s = @game.substitutions.new
+    s.on_time = params[:substitution][:on_time].to_i
+    s.off_time = params[:substitution][:off_time].to_i
+    s.player_id = params[:substitution][:player_id].to_i
+    s.team_id = params[:substitution][:team_id].to_i
+    s.gk = params[:substitution][:gk] == "true"
+    unless params[:substitution][:replaces_id].blank?
+      s.replaces_id = params[:substitution][:replaces_id].to_i
+      replaced = Substitution.find(params[:substitution][:replaces_id])
+      replaced.off_time = params[:substitution][:on_time].to_i
+      replaced.save
+    end
+    s.save
+    unless params[:substitution][:replaced_by_id].blank?
+      replacing = Substitution.find(params[:substitution][:replaced_by_id])
+      replacing.replaces_id = s.id
+    end
+
+    respond_to do |format|
+      format.json {
+        render json: @game.partitioned_substitutions.to_json(root: false, include: :player)
+      }
+    end
+  end
+
   def attend
     @game = params[:game]
     @attending = current_player.attending? @game

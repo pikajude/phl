@@ -16,46 +16,51 @@
     list-style-type: none;
     margin-bottom: 5px;
     min-height: 20px;
-  }
-
-  li div {
-    border-radius: 3px;
-    padding: 5px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     overflow: hidden;
-    box-sizing: border-box;
+
+    div {
+      float: left;
+
+      span {
+        display: block;
+        padding: 5px;
+        box-sizing: border-box;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
   }
 
-  .sub-color-0 {
+  .sub-color-0 span {
     background: #b9a4ff;
   }
 
-  .sub-color-1 {
+  .sub-color-1 span {
     background: #dc9dff;
   }
 
-  .sub-color-2 {
+  .sub-color-2 span {
     background: #ffff98;
   }
 
-  .sub-color-3 {
+  .sub-color-3 span {
     background: #ffed98;
   }
 
-  .sub-color-4 {
+  .sub-color-4 span {
     background: #98ffff;
   }
 
-  .sub-color-5 {
+  .sub-color-5 span {
     background: #a3bfff;
   }
 
-  .sub-color-6 {
+  .sub-color-6 span {
     background: #ffdd98;
   }
 
-  .sub-color-7 {
+  .sub-color-7 span {
     background: #ffc798;
   }
 
@@ -95,16 +100,22 @@
     }
 
     ul.positions {
-      padding: 0 5px 1px 54px;
+      padding: 0 5px 1px 55px;
       background: #eee;
+      overflow: auto;
 
       li.time {
         color: #eee;
         padding-top: 5px;
         padding-bottom: 2px;
-        margin-left: -54px;
-        padding-left: 54px;
+        margin-left: -55px;
+        padding-left: 55px;
         background: #454545;
+      }
+
+      li.invalid div span {
+        background: #f88;
+        color: white;
       }
     }
   }
