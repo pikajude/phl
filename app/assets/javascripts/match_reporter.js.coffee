@@ -23,8 +23,6 @@ window.MatchReporter = ($scope) ->
       offs = ui2.offset.left - (if lastBefore.length == 0 then 0 else lastBefore.offset().left)
       if $(event.target).data("team-id") == ui.draggable.data("team-id") && ui.draggable.data("player-id") != lastBefore.data("player-id")
         $(".invalid").removeClass("invalid")
-        $(event.target).find("div").each ->
-          $(this).find("span").css({width: $(this).data("width") + "px"})
         lastBefore.find("span").css({width: "#{offs}px"})
       else
         lastBefore.addClass("invalid")
@@ -45,11 +43,11 @@ window.MatchReporter = ($scope) ->
       $(".invalid").removeClass("invalid")
 
   $scope.lastBefore = (pos, event) ->
-    kids = $.makeArray($(event.target).find("div")).reverse()
+    kids = $.makeArray($(event.target).children("div")).reverse()
     $(_.find kids, (elem) -> $(elem).position().left - 55 < pos)
 
   $scope.firstAfter = (pos, event) ->
-    kids = $.makeArray($(event.target).find("div"))
+    kids = $.makeArray($(event.target).children("div"))
     $(_.find(kids, (elem) -> $(elem).offset().left > pos) || kids[kids.length - 1])
 
   $scope.addSubstitutionAfter = (time, event, ui) ->
@@ -82,8 +80,15 @@ window.MatchReporter = ($scope) ->
   angular.element("li.player").draggable {
     opacity: 0.4,
     revert: true,
-    start: -> $(this).addClass("dragging"),
-    stop: -> $(this).removeClass("dragging")
+    revertDuration: 100,
+    start: ->
+      $(this).addClass("dragging")
+      debugger
+      $("div[data-player-id=#{$(this).data("player-id")}] .ui-resizable").resizable("option", "disabled", true)
+    ,
+    stop: ->
+      $(this).removeClass("dragging")
+      $(".ui-resizable").resizable("option", "disabled", false)
   }
   angular.element("ul.positions li.spot").droppable {
     over: $scope.detectDrop,
@@ -96,7 +101,7 @@ window.MatchReporter = ($scope) ->
   $scope.bindResizes = ->
     _.each angular.element("li.spot span"), (e) ->
       $(e).resizable {
-        handles: "e",
+        handles: "w",
         maxWidth: parseInt($(e).css("width")),
         stop: (event, ui) -> $scope.updateSingle(event)
       }
@@ -132,3 +137,10 @@ window.MatchReporter = ($scope) ->
       """ for sub in subs).join ""
     else
       ""
+
+  angular.element("ul.positions").on "scroll", (evt) ->
+    offs = evt.target.scrollLeft
+    $("li.spot span").each ->
+      $(this).css {
+        "padding-left": Math.max(5, 104 - $(this).offset().left)
+      }

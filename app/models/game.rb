@@ -36,6 +36,7 @@ class Game < ActiveRecord::Base
   def partitioned_substitutions
     Hash[self.substitutions.
       where(replaces_id: nil).
+      order(:id).
       map do |sub|
         sub.replacements
       end.
