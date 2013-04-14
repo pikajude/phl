@@ -83,7 +83,6 @@ window.MatchReporter = ($scope) ->
     revertDuration: 100,
     start: ->
       $(this).addClass("dragging")
-      debugger
       $("div[data-player-id=#{$(this).data("player-id")}] .ui-resizable").resizable("option", "disabled", true)
     ,
     stop: ->
