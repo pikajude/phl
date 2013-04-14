@@ -1,6 +1,14 @@
 class GamesController < ApplicationController
   before_filter :authenticate_player!
 
+  def show
+    @game = Game.find_by(id: params[:id]) || not_found
+
+    respond_to do |format|
+      format.json { render json: @game.to_json(root: false) }
+    end
+  end
+
   def attend
     @game = params[:game]
     @attending = current_player.attending? @game

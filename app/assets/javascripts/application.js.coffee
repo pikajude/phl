@@ -20,6 +20,7 @@
 #= require angular
 #= require jquery.tipsy
 #= require angular-dragdrop
+#= require angular-sanitize
 #= require_tree .
 
 $.ajaxSettings.dataType = "json"

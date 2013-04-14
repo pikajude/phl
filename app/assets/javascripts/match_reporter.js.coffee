@@ -1,13 +1,20 @@
+phl = angular.module('phl', ['ngSanitize'])
+
 window.MatchReporter = ($scope) ->
   $scope.game_id = angular.element("#match-reporter").data("game-id")
 
+  $.ajax "/games/#{$scope.game_id}", {
+    success: (data, status, xhr) ->
+      $scope.game = data
+  }
+
   $.ajax "/games/#{$scope.game_id}/substitutions", {
     success: (data, status, xhr) ->
-      # $scope.subs = data
+      $scope.subs = data
       $scope.$apply ->
   }
 
-  $scope.tryDrop = ->
+  $scope.tryDrop = (event, ui) ->
     debugger
 
   angular.element("li.player").draggable({revert: true})
@@ -17,9 +24,11 @@ window.MatchReporter = ($scope) ->
 
   $scope.substitution = (pos, side, idx) ->
     if $scope.subs
-      debugger
       subs = $scope.subs[side][pos][idx]
-      angular.element("li##{pos}-#{side}-#{idx}").html(
-        "#{sub.on_time} - #{sub.off_time}" for sub in subs)
+      ("""
+        <div style='width: #{(sub.off_time - sub.on_time) / $scope.game.length * 100}%'>
+          hi
+        </div>
+      """ for sub in subs).join ""
     else
       ""

@@ -7,23 +7,15 @@
 
   #match-reporter{"data-game-id" => @game.id}
     %ul.floating.positions
-      %li{id: "gk-#{@game.home_team_id}-0"}
-        {{substitution("gk", #{@game.home_team_id}, 0)}}
-      %li{id: "player-#{@game.home_team_id}-0"}
-        {{substitution("player", #{@game.home_team_id}, 0)}}
-      %li{id: "player-#{@game.home_team_id}-1"}
-        {{substitution("player", #{@game.home_team_id}, 1)}}
-      %li{id: "player-#{@game.home_team_id}-2"}
-        {{substitution("player", #{@game.home_team_id}, 2)}}
+      %li{"ng-bind-html-unsafe" => "substitution('gk',     #{@game.home_team_id}, 0)", "data-position" => "gk"    , "data-team-id" => @game.home_team_id, "data-reporter-index" => 0}
+      %li{"ng-bind-html-unsafe" => "substitution('player', #{@game.home_team_id}, 0)", "data-position" => "player", "data-team-id" => @game.home_team_id, "data-reporter-index" => 0}
+      %li{"ng-bind-html-unsafe" => "substitution('player', #{@game.home_team_id}, 1)", "data-position" => "player", "data-team-id" => @game.home_team_id, "data-reporter-index" => 1}
+      %li{"ng-bind-html-unsafe" => "substitution('player', #{@game.home_team_id}, 2)", "data-position" => "player", "data-team-id" => @game.home_team_id, "data-reporter-index" => 2}
       %li.space
-      %li{id: "player-#{@game.away_team_id}-2"}
-        {{substitution("player", #{@game.away_team_id}, 2)}}
-      %li{id: "player-#{@game.away_team_id}-1"}
-        {{substitution("player", #{@game.away_team_id}, 1)}}
-      %li{id: "player-#{@game.away_team_id}-0"}
-        {{substitution("player", #{@game.away_team_id}, 0)}}
-      %li{id: "gk-#{@game.away_team_id}-0"}
-        {{substitution("gk", #{@game.away_team_id}, 0)}}
+      %li{"ng-bind-html-unsafe" => "substitution('player', #{@game.away_team_id}, 2)", "data-position" => "player", "data-team-id" => @game.away_team_id, "data-reporter-index" => 2}
+      %li{"ng-bind-html-unsafe" => "substitution('player', #{@game.away_team_id}, 1)", "data-position" => "player", "data-team-id" => @game.away_team_id, "data-reporter-index" => 1}
+      %li{"ng-bind-html-unsafe" => "substitution('player', #{@game.away_team_id}, 0)", "data-position" => "player", "data-team-id" => @game.away_team_id, "data-reporter-index" => 0}
+      %li{"ng-bind-html-unsafe" => "substitution('gk',     #{@game.away_team_id}, 0)", "data-position" => "gk"    , "data-team-id" => @game.away_team_id, "data-reporter-index" => 0}
 
   .team
     %h2= colored_team_name @game.away_team
