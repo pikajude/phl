@@ -19,7 +19,7 @@ window.MatchReporter = ($scope) ->
     $scope.bound = event.target
     $("li.player").unbind "drag"
     $("li.player").on "drag", (event2, ui2) ->
-      lastBefore = $scope.lastBefore(ui2.offset.left, event)
+      lastBefore = $scope.lastBefore(ui2.offset.left - $($scope.bound).offset().left, event)
       offs = ui2.offset.left - (if lastBefore.length == 0 then 0 else lastBefore.offset().left)
       if $(event.target).data("team-id") == ui.draggable.data("team-id") && ui.draggable.data("player-id") != lastBefore.data("player-id")
         $(".invalid").removeClass("invalid")
@@ -30,7 +30,7 @@ window.MatchReporter = ($scope) ->
   $scope.undetectDrop = (event, ui, droppingAfterward) ->
     if $scope.bound == event.target
       $("li.player").unbind "drag"
-    $(event.target).find("div").each ->
+    $(event.target).children("div").each ->
       $(this).find("span").css({width: $(this).data("width") + "px"})
     unless droppingAfterward
       $(event.target).removeClass("invalid")
@@ -48,14 +48,14 @@ window.MatchReporter = ($scope) ->
 
   $scope.firstAfter = (pos, event) ->
     kids = $.makeArray($(event.target).children("div"))
-    $(_.find(kids, (elem) -> $(elem).offset().left > pos) || kids[kids.length - 1])
+    $(_.find(kids, (elem) -> $(elem).position().left > pos) || kids[kids.length - 1])
 
   $scope.addSubstitutionAfter = (time, event, ui) ->
     prev = $scope.lastBefore(time, event).data("sub-id")
     first = $scope.firstAfter(time, event)
     opts = {
       on_time: if prev then time / 2 else 0,
-      off_time: if first.length != 0 then (first.position().left + first.width() - 54) / 2 else 600,
+      off_time: if first.length != 0 then (first.position().left - 54) / 2 else 600,
       replaces_id: prev,
       player_id: $(ui.draggable).data("player-id"),
       team_id: $(ui.draggable).data("team-id"),

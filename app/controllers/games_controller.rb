@@ -27,6 +27,7 @@ class GamesController < ApplicationController
     unless params[:substitution][:replaced_by_id].blank?
       replacing = Substitution.find(params[:substitution][:replaced_by_id])
       replacing.replaces_id = s.id
+      replacing.save
     end
 
     respond_to do |format|
