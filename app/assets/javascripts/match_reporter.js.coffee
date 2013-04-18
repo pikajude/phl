@@ -101,7 +101,7 @@ window.MatchReporter = ($scope) ->
     _.each angular.element("li.spot span"), (e) ->
       $(e).resizable {
         handles: "w",
-        maxWidth: parseInt($(e).css("width")),
+        maxWidth: parseInt($(e).css("width")) - 10,
         stop: (event, ui) -> $scope.updateSingle(event)
       }
 
@@ -109,15 +109,20 @@ window.MatchReporter = ($scope) ->
     span = $(event.target)
     parent = span.parent("div")
     opts = {
-      on_time: (span.position().left - 55) / 2,
-      off_time: (span.position().left + span.width() - 55) / 2,
+      on_time: (span.position().left + parent.position().left) / 2,
+      off_time: (span.position().left + parent.position().left + span.width()) / 2 + 10,
       id: parent.data("sub-id")
     }
     $.ajax "/games/#{$scope.game.id}/substitution", {
       data: { substitution: opts },
       type: "PUT",
       success: (data, status, xhr) ->
-        debugger
+        sub = $("div[data-sub-id=#{data.id}]")
+        sub.children("span").css("left", "")
+        sub.css({
+          width: "#{(data.off_time - data.on_time) * 2}px",
+          left: "#{data.on_time * 2}px"
+        })
     }
 
   genColor = (a, b) -> (b ^ a) % 12
@@ -128,7 +133,7 @@ window.MatchReporter = ($scope) ->
       return if !$scope.subs[side] || !$scope.subs[side][pos] || !$scope.subs[side][pos][idx]
       subs = $scope.subs[side][pos][idx]
       ("""
-      <div data-player-id='#{sub.player.id}' data-sub-id='#{sub.id}' class='sub-color-#{genColor(side, sub.player.id)}' style='width: #{(sub.off_time - sub.on_time) * 2}px' data-width='#{(sub.off_time - sub.on_time) * 2}'>
+      <div data-player-id='#{sub.player.id}' data-sub-id='#{sub.id}' class='sub-color-#{genColor(side, sub.player.id)} substitution' style='width: #{(sub.off_time - sub.on_time) * 2}px; left: #{sub.on_time * 2}px' data-width='#{(sub.off_time - sub.on_time) * 2}'>
         <span style='width: #{(sub.off_time - sub.on_time) * 2}px'>
           #{sub.player.username} 
         </span>

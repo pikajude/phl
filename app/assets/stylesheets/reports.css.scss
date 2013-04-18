@@ -17,6 +17,7 @@
     margin-bottom: 5px;
     height: 27px;
     overflow: hidden;
+    position: relative;
 
     div {
       float: left;
@@ -30,6 +31,10 @@
         overflow: hidden;
       }
     }
+  }
+
+  .substitution {
+    position: absolute;
   }
 
   .sub-color-0 span {

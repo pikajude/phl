@@ -11,6 +11,7 @@ class GamesController < ApplicationController
 
   def substitute
     @game = Game.find_by(id: params[:id]) || not_found
+    authorize! :report, @game
     s = @game.substitutions.new
     s.on_time = params[:substitution][:on_time].to_i
     s.off_time = params[:substitution][:off_time].to_i
@@ -39,6 +40,7 @@ class GamesController < ApplicationController
 
   def attend
     @game = params[:game]
+    authorize! :attend, @game
     @attending = current_player.attending? @game
     if @attending
       current_player.unattend @game
@@ -78,6 +80,18 @@ class GamesController < ApplicationController
       format.json {
         render json: @game.partitioned_substitutions.to_json(root: false, include: :player)
       }
+    end
+  end
+
+  def update_substitution
+    @sub = Substitution.find_by id: params[:substitution][:id]
+    @sub.on_time = params[:substitution][:on_time].to_i
+    @sub.off_time = params[:substitution][:off_time].to_i
+    @sub.save
+
+    respond_to do |format|
+      format.html { redirect_to edit_report_path(params[:id]) }
+      format.json { render json: @sub.to_json(root: false) }
     end
   end
 end

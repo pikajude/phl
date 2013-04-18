@@ -30,11 +30,17 @@ class Ability
       can :report, Game do |g|
         player.games.include?(g) && !g.reported
       end
+      can :attend, Game do |g|
+        player.games.include? g
+      end
       can :manage, Team
       can :read, Post
 
     when "player"
       can :read, Post
+      can :attend, Game do |g|
+        player.games.include? g
+      end
 
     when "banned"
       cannot :manage, :all
