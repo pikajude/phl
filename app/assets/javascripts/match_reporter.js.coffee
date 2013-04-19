@@ -101,7 +101,6 @@ window.MatchReporter = ($scope) ->
     _.each angular.element("li.spot span"), (e) ->
       $(e).resizable {
         handles: "w",
-        maxWidth: parseInt($(e).css("width")) - 10,
         stop: (event, ui) -> $scope.updateSingle(event)
       }
 
