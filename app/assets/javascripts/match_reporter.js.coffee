@@ -1,5 +1,7 @@
 phl = angular.module('phl', ['ngSanitize'])
 
+$.fn.right = -> $(this).position().left + $(this).width()
+
 window.MatchReporter = ($scope) ->
   $scope.game_id = angular.element("#match-reporter").data("game-id")
 
@@ -106,18 +108,21 @@ window.MatchReporter = ($scope) ->
       }
 
   $scope.restrictBounds = (event, ui) ->
-    $target = $(event.target)
-    kids = $.makeArray($target.parents("li").children("div")).reverse()
-    first = $(_.find kids, (elem) -> $(elem).position().left - 55 < ui.originalPosition.left)
-    difference = $target.parent("div").position().left - (first.position().left + first.width())
-    $target.resizable("option", "maxWidth", $target.width() + difference)
+    if $(event.toElement).hasClass("ui-resizable-w")
+      $target = $(event.target)
+      kids = $.makeArray($target.parents("li").children("div")).reverse()
+      first = $(_.find kids, (elem) -> $(elem).right() - 55 < ui.originalPosition.left)
+      difference = $target.parent("div").position().left - first.right()
+      $target.resizable("option", "maxWidth", $target.width() + difference)
+    else
+      console.log("lol not handled yet")
 
   $scope.updateSingle = (event) ->
     span = $(event.target)
     parent = span.parent("div")
     opts = {
       on_time: (span.position().left + parent.position().left) / 2,
-      off_time: (span.position().left + parent.position().left + span.width()) / 2 + 10,
+      off_time: (span.right() + parent.position().left) / 2 + 10,
       id: parent.data("sub-id")
     }
     $.ajax "/games/#{$scope.game.id}/substitution", {
