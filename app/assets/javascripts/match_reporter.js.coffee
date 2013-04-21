@@ -100,9 +100,17 @@ window.MatchReporter = ($scope) ->
   $scope.bindResizes = ->
     _.each angular.element("li.spot span"), (e) ->
       $(e).resizable {
-        handles: "w",
-        stop: (event, ui) -> $scope.updateSingle(event)
+        handles: "e, w",
+        stop: (event, ui) -> $scope.updateSingle(event),
+        start: $scope.restrictBounds
       }
+
+  $scope.restrictBounds = (event, ui) ->
+    $target = $(event.target)
+    kids = $.makeArray($target.parents("li").children("div")).reverse()
+    first = $(_.find kids, (elem) -> $(elem).position().left - 55 < ui.originalPosition.left)
+    difference = $target.parent("div").position().left - (first.position().left + first.width())
+    $target.resizable("option", "maxWidth", $target.width() + difference)
 
   $scope.updateSingle = (event) ->
     span = $(event.target)
