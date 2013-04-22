@@ -1,5 +1,7 @@
 phl = angular.module('phl', ['ngSanitize'])
 
+window.mr ||= {}
+
 $.fn.right = -> $(this).position().left + $(this).width()
 
 window.MatchReporter = ($scope) ->
@@ -17,44 +19,9 @@ window.MatchReporter = ($scope) ->
       $scope.bindResizes()
   }
 
-  $scope.detectDrop = (event, ui) ->
-    $scope.bound = event.target
-    $("li.player").unbind "drag"
-    $("li.player").on "drag", (event2, ui2) ->
-      lastBefore = $scope.lastBefore(ui2.offset.left - $($scope.bound).offset().left, event)
-      offs = ui2.offset.left - (if lastBefore.length == 0 then 0 else lastBefore.offset().left)
-      if $(event.target).data("team-id") == ui.draggable.data("team-id") && ui.draggable.data("player-id") != lastBefore.data("player-id")
-        $(".invalid").removeClass("invalid")
-        lastBefore.find("span").css({width: "#{offs}px"})
-      else
-        lastBefore.addClass("invalid")
-
-  $scope.undetectDrop = (event, ui, droppingAfterward) ->
-    if $scope.bound == event.target
-      $("li.player").unbind "drag"
-    $(event.target).children("div").each ->
-      $(this).find("span").css({width: $(this).data("width") + "px"})
-    unless droppingAfterward
-      $(event.target).removeClass("invalid")
-
-  $scope.performDrop = (event, ui) ->
-    if $(event.target).data("team-id") == ui.draggable.data("team-id") && $(event.target).find("div.invalid").length == 0
-      offset = ui.offset.left - $(event.target).offset().left
-      $scope.addSubstitutionAfter(offset, event, ui)
-    else
-      $(".invalid").removeClass("invalid")
-
-  $scope.lastBefore = (pos, event) ->
-    kids = $.makeArray($(event.target).children("div")).reverse()
-    $(_.find kids, (elem) -> $(elem).position().left - 55 < pos)
-
-  $scope.firstAfter = (pos, event) ->
-    kids = $.makeArray($(event.target).children("div"))
-    $(_.find(kids, (elem) -> $(elem).position().left > pos) || kids[kids.length - 1])
-
   $scope.addSubstitutionAfter = (time, event, ui) ->
-    prev = $scope.lastBefore(time, event).data("sub-id")
-    first = $scope.firstAfter(time, event)
+    prev = mr.geometry.lastBefore(time, $(event.target).children("div")).data("sub-id")
+    first = mr.geometry.firstAfter(time, $(event.target).children("div"))
     opts = {
       on_time: if prev then time / 2 else 0,
       off_time: if first.length != 0 then (first.position().left - 54) / 2 else 600,
@@ -92,11 +59,11 @@ window.MatchReporter = ($scope) ->
       $(".ui-resizable").resizable("option", "disabled", false)
   }
   angular.element("ul.positions li.spot").droppable {
-    over: $scope.detectDrop,
-    out: $scope.undetectDrop,
+    over: (event, ui) -> mr.droppable.detectDrop($scope, event, ui),
+    out:  (event, ui) -> mr.droppable.undetectDrop($scope, event, ui),
     drop: (event, ui) ->
-      $scope.undetectDrop(event, ui, true)
-      $scope.performDrop(event, ui)
+      mr.droppable.undetectDrop($scope, event, ui, true)
+      mr.droppable.performDrop($scope, event, ui)
   }
 
   $scope.bindResizes = ->
