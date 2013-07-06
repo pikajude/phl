@@ -33,9 +33,9 @@ class Game < ActiveRecord::Base
   end
 
   # this part is fun
-  def partitioned_substitutions
+  def partitioned_substitutions_by_half half
     Hash[self.substitutions.
-      where(replaces_id: nil).
+      where(replaces_id: nil, half: half).
       order(:id).
       map do |sub|
         sub.replacements

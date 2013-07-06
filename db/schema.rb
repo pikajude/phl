@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130413225437) do
+ActiveRecord::Schema.define(version: 20130706000535) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20130413225437) do
     t.string   "title"
     t.boolean  "deletable"
     t.integer  "player_id"
-    t.float    "relative_size", default: 0.0, null: false
+    t.float    "relative_size", default: 1.0, null: false
     t.string   "template_name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20130413225437) do
     t.integer  "order"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "played_on",           default: '2013-04-04 02:34:06', null: false
+    t.datetime "played_on",           default: '2013-06-01 17:00:01', null: false
     t.integer  "week"
     t.integer  "day"
     t.integer  "substitution_count",  default: 0,                     null: false
@@ -152,10 +152,10 @@ ActiveRecord::Schema.define(version: 20130413225437) do
     t.string   "username",                                          null: false
   end
 
-  add_index "players", ["confirmation_token"], name: "index_players_on_confirmation_token", unique: true
-  add_index "players", ["email"], name: "index_players_on_email", unique: true
-  add_index "players", ["reset_password_token"], name: "index_players_on_reset_password_token", unique: true
-  add_index "players", ["unlock_token"], name: "index_players_on_unlock_token", unique: true
+  add_index "players", ["confirmation_token"], name: "index_players_on_confirmation_token", unique: true, using: :btree
+  add_index "players", ["email"], name: "index_players_on_email", unique: true, using: :btree
+  add_index "players", ["reset_password_token"], name: "index_players_on_reset_password_token", unique: true, using: :btree
+  add_index "players", ["unlock_token"], name: "index_players_on_unlock_token", unique: true, using: :btree
 
   create_table "posts", force: true do |t|
     t.string   "title"
@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(version: 20130413225437) do
     t.integer  "player_id"
     t.boolean  "gk",          default: false, null: false
     t.integer  "replaces_id"
+    t.integer  "half",        default: 1,     null: false
   end
 
   create_table "teams", force: true do |t|

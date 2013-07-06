@@ -5,6 +5,8 @@
         %li.player{"data-player-id" => player.id, "data-team-id" => @game.home_team_id, "data-drag" => "true", "jqyoui-draggable" => "{animate:true}"}
           %div= player.username
     %h2= colored_team_name @game.home_team
+    %span.half-picker
+      = select_tag :half, options_for_select([["First half", 1], ["Second half", 2], ["Overtime", 3]])
 
   #match-reporter{"data-game-id" => @game.id}
     %ul.floating
@@ -17,11 +19,8 @@
       %li Player
       %li Player
       %li GK
-    %ul.positions
-      %li.time
-        %span.start 0:00
-        %span.mid 2:30
-        %span.stop 5:00
+    %ul.positions{"data-half" => 1}
+      = time_spans
       %li.spot{"ng-bind-html-unsafe" => "substitution('gk',     #{@game.home_team_id}, 0)", "data-position" => "gk"    , "data-team-id" => @game.home_team_id, "data-reporter-index" => 0}
       %li.spot{"ng-bind-html-unsafe" => "substitution('player', #{@game.home_team_id}, 0)", "data-position" => "player", "data-team-id" => @game.home_team_id, "data-reporter-index" => 0}
       %li.spot{"ng-bind-html-unsafe" => "substitution('player', #{@game.home_team_id}, 1)", "data-position" => "player", "data-team-id" => @game.home_team_id, "data-reporter-index" => 1}

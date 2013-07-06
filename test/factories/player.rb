@@ -1,11 +1,20 @@
 require 'faker'
 
+$playered = false
+
 FactoryGirl.define do
   sequence(:username) { |n| "#{Faker::Name.name.parameterize}_#{n}" }
   sequence(:email) { |n| "user_#{n}@example.com" }
 
   factory :player do
-    username { generate(:username) }
+    username {
+      if $playered
+        generate(:username)
+      else
+        $playered = true
+        "otters"
+      end
+    }
     team
     signature { SecureRandom.urlsafe_base64(32) }
     title { SecureRandom.urlsafe_base64(12) }

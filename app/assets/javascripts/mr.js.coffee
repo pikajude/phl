@@ -2,128 +2,124 @@ phl = angular.module('phl', ['ngSanitize'])
 
 window.mr ||= {}
 
-$.fn.right = -> $(this).position().left + $(this).width()
-
 window.MatchReporter = ($scope) ->
-  $scope.game_id = angular.element("#match-reporter").data("game-id")
-
-  $.ajax "/games/#{$scope.game_id}", {
-    success: (data, status, xhr) ->
-      $scope.game = data
-  }
-
-  $.ajax "/games/#{$scope.game_id}/substitutions", {
-    success: (data, status, xhr) ->
-      $scope.subs = data
-      $scope.$apply ->
-      $scope.bindResizes()
-  }
-
-  $scope.addSubstitutionAfter = (time, event, ui) ->
-    prev = mr.geometry.lastBefore(time, $(event.target).children("div")).data("sub-id")
-    first = mr.geometry.firstAfter(time, $(event.target).children("div"))
-    opts = {
-      on_time: if prev then time / 2 else 0,
-      off_time: if first.length != 0 then (first.position().left - 54) / 2 else 600,
-      replaces_id: prev,
-      player_id: $(ui.draggable).data("player-id"),
-      team_id: $(ui.draggable).data("team-id"),
-      gk: $(event.target).data("position") == "gk"
+  $scope.getBounds = (ui, p) ->
+    before = _.find p.children().slice().toArray().reverse(), (e) ->
+      $(e).position().left < (ui.offset.left - p.offset().left)
+    after = _.find p.children().toArray(), (e) ->
+      $(e).position().left > (ui.offset.left - p.offset().left)
+    offset = Math.max(0, Math.round((ui.offset.left - p.offset().left) / 3))
+    minutes = Math.floor(offset / 60)
+    seconds = offset % 60
+    format = if seconds < 10 then "0" + seconds else ("" + seconds)
+    {
+      before: before,
+      after: after,
+      start: minutes * 60 + seconds,
+      end: if after then Math.floor($(after).position().left / 3) else 300,
+      formatted: minutes + ":" + format + " - 5:00"
     }
-    unless first.data("sub-id") == prev
-      opts.replaced_by_id = first.data("sub-id")
-    if opts.on_time > opts.off_time
-      opts.off_time = 600
-    $scope.createSub opts
 
-  $scope.createSub = (obj) ->
-    $.ajax "/games/#{$scope.game.id}/substitute", {
-      data: {substitution: obj},
-      type: "PUT",
+  $scope.substitute = (obj) ->
+    $.ajax("/games/#{$scope.gameId}/substitute", {
+      dataType: "json",
+      data: { substitution: obj }
+      type: "POST",
       success: (data, status, xhr) ->
-        $scope.subs = data
+        $scope.substitutions = data
         $scope.$apply ->
-        $scope.bindResizes()
+    })
+
+  # droppable doesn't trigger drag events itself, so we
+  # have to combine the two :3
+  $scope.startDragging = (elem, p) ->
+    if $scope.validate(elem, p)
+      $(elem).tipsy({trigger: "manual", gravity: $.fn.tipsy.autoNS})
+      $(elem).on "drag", (event, ui) ->
+        console.log($scope.getBounds(ui, p))
+        $(elem).attr("title", $scope.getBounds(ui, p).formatted)
+        $(elem).tipsy("show")
+    else
+      p.addClass("invalid")
+
+  $scope.stopDragging = (elem, p) ->
+    $(elem).tipsy("hide")
+    $("li.player").unbind "drag"
+    p.removeClass("invalid")
+
+  $scope.validate = (elem, p) -> $(elem).data("team-id") == p.data("team-id")
+
+  $scope.drop = (elem, p, ui) ->
+    if p.hasClass("invalid")
+      p.removeClass("invalid")
+      return
+    $(elem).tipsy("hide")
+    $("li.player").unbind "drag"
+    bounds = $scope.getBounds(ui, p)
+    args = {
+      on_time: bounds.start,
+      off_time: bounds.end,
+      player_id: $(elem).data("player-id"),
+      team_id: $(elem).data("team-id"),
+      gk: p.data("position") == "gk",
+      half: $scope.currentHalf
     }
+    if bounds.after
+      args.replaced_by_id = $(bounds.after).data("sub-id")
+    $scope.substitute(args)
 
   angular.element("li.player").draggable {
     opacity: 0.4,
     revert: true,
+    grid: [3, 1],
     revertDuration: 100,
-    start: ->
-      $(this).addClass("dragging")
-      $("div[data-player-id=#{$(this).data("player-id")}] .ui-resizable").resizable("option", "disabled", true)
-    ,
-    stop: ->
-      $(this).removeClass("dragging")
-      $(".ui-resizable").resizable("option", "disabled", false)
+    cursorAt: { left: 5, top: 10 },
+    start: -> $(this).addClass("dragging")
+    stop: -> $(this).removeClass("dragging")
   }
-  angular.element("ul.positions li.spot").droppable {
-    over: (event, ui) -> mr.droppable.detectDrop($scope, event, ui),
-    out:  (event, ui) -> mr.droppable.undetectDrop($scope, event, ui),
+
+  angular.element("li.spot").droppable {
+    tolerance: "pointer",
+    over: (event, ui) ->
+      self = $(this)
+      self.addClass("hover")
+      $scope.startDragging(ui.draggable[0], self)
+    out:  (event, ui) ->
+      self = $(this)
+      self.removeClass("hover")
+      $scope.stopDragging(ui.draggable[0], self)
     drop: (event, ui) ->
-      mr.droppable.undetectDrop($scope, event, ui, true)
-      mr.droppable.performDrop($scope, event, ui)
+      self = $(this)
+      self.removeClass("hover")
+      $scope.drop(ui.draggable[0], self, ui)
   }
 
-  $scope.bindResizes = ->
-    _.each angular.element("li.spot span"), (e) ->
-      $(e).resizable {
-        handles: "e, w",
-        stop: (event, ui) -> $scope.updateSingle(event),
-        start: $scope.restrictBounds
-      }
+  $scope.gameId = $("#match-reporter").data("game-id")
+  $scope.currentHalf = 1
 
-  $scope.restrictBounds = (event, ui) ->
-    if $(event.toElement).hasClass("ui-resizable-w")
-      $target = $(event.target)
-      kids = $.makeArray($target.parents("li").children("div")).reverse()
-      first = $(_.find kids, (elem) -> $(elem).right() - 55 < ui.originalPosition.left)
-      difference = $target.parent("div").position().left - first.right()
-      $target.resizable("option", "maxWidth", $target.width() + difference)
-    else
-      console.log("lol not handled yet")
+  $.ajax("/games/#{$scope.gameId}", {
+    success: (data, status, xhr) ->
+      $scope.game = data
+  })
 
-  $scope.updateSingle = (event) ->
-    span = $(event.target)
-    parent = span.parent("div")
-    opts = {
-      on_time: (span.position().left + parent.position().left) / 2,
-      off_time: (span.right() + parent.position().left) / 2 + 10,
-      id: parent.data("sub-id")
-    }
-    $.ajax "/games/#{$scope.game.id}/substitution", {
-      data: { substitution: opts },
-      type: "PUT",
-      success: (data, status, xhr) ->
-        sub = $("div[data-sub-id=#{data.id}]")
-        sub.children("span").css("left", "")
-        sub.css({
-          width: "#{(data.off_time - data.on_time) * 2}px",
-          left: "#{data.on_time * 2}px"
-        })
-    }
-
-  genColor = (a, b) -> (b ^ a) % 12
+  $.ajax("/games/#{$scope.gameId}/substitutions/#{$scope.currentHalf}", {
+    dataType: "json",
+    success: (data, status, xhr) ->
+      $scope.substitutions = data
+      $scope.$apply ->
+  })
 
   $scope.substitution = (pos, side, idx) ->
-    if $scope.subs
-      $("ul.positions li").css({width: "#{$scope.game.length * 2}px"})
-      return if !$scope.subs[side] || !$scope.subs[side][pos] || !$scope.subs[side][pos][idx]
-      subs = $scope.subs[side][pos][idx]
+    genColor = (a, b) -> (b ^ a) % 12
+    if $scope.substitutions
+      return if !$scope.substitutions[side] || !$scope.substitutions[side][pos] || !$scope.substitutions[side][pos][idx]
+      subs = $scope.substitutions[side][pos][idx]
       ("""
-      <div data-player-id='#{sub.player.id}' data-sub-id='#{sub.id}' class='sub-color-#{genColor(side, sub.player.id)} substitution' style='width: #{(sub.off_time - sub.on_time) * 2}px; left: #{sub.on_time * 2}px' data-width='#{(sub.off_time - sub.on_time) * 2}'>
-        <span style='width: #{(sub.off_time - sub.on_time) * 2}px'>
-          #{sub.player.username} 
+      <div data-player-id='#{sub.player.id}' data-sub-id='#{sub.id}' class='sub-color-#{genColor(side, sub.player.id)} substitution' style='width: #{(sub.off_time - sub.on_time) * 3}px; left: #{sub.on_time * 3}px' data-width='#{(sub.off_time - sub.on_time) * 3}'>
+        <span style='width: #{(sub.off_time - sub.on_time) * 3}px'>
+          #{sub.player.username}
         </span>
       </div>
       """ for sub in subs).join ""
     else
       ""
-
-  angular.element("ul.positions").on "scroll", (evt) ->
-    offs = evt.target.scrollLeft
-    $("li.spot span").each ->
-      $(this).css {
-        "padding-left": Math.max(5, 104 - $(this).offset().left)
-      }

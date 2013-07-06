@@ -5,7 +5,7 @@
 .reports {
   #content {
     padding: 0 20px;
-  
+
     .page {
       max-width: 900px;
       margin: 0 auto;
@@ -90,6 +90,10 @@
     border-radius: 3px;
     display: inline-block;
 
+    div {
+      padding: 4px;
+    }
+
     &:hover, &.dragging {
       background: #cccc88;
     }
@@ -126,14 +130,40 @@
       background: #eee;
       overflow: auto;
 
+      li {
+        width: 900px;
+      }
+
       li.time {
         color: #eee;
         height: 20px;
-        padding-top: 5px;
-        padding-bottom: 2px;
+        padding-top: 3px;
+        padding-bottom: 4px;
         margin-left: -55px;
         padding-left: 55px;
         background: #454545;
+
+        table {
+          width: 990px;
+          margin: 0 -45px;
+
+          td {
+            text-align: center;
+          }
+        }
+      }
+
+      li.spot {
+        background: #ddd;
+        border-radius: 4px;
+
+        &.hover {
+          background: #bbb;
+        }
+
+        &.invalid {
+          background: red;
+        }
       }
 
       li div.invalid span {

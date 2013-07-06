@@ -6,7 +6,7 @@
 development:
   adapter: postgresql
   database: phl
-  username: otters
+  username: joelteon
   pool: 5
   timeout: 5000
 
@@ -16,7 +16,7 @@ development:
 test:
   adapter: postgresql
   database: phl_test
-  username: otters
+  username: joelteon
   pool: 5
   timeout: 5000
 

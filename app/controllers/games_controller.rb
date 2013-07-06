@@ -1,12 +1,12 @@
 class GamesController < ApplicationController
   before_filter :authenticate_player!
 
+  respond_to :json
+
   def show
     @game = Game.find_by(id: params[:id]) || not_found
 
-    respond_to do |format|
-      format.json { render json: @game.to_json(root: false) }
-    end
+    respond_with @game
   end
 
   def substitute
@@ -18,10 +18,10 @@ class GamesController < ApplicationController
     s.player_id = params[:substitution][:player_id].to_i
     s.team_id = params[:substitution][:team_id].to_i
     s.gk = params[:substitution][:gk] == "true"
+    s.half = params[:substitution][:half].to_i
     unless params[:substitution][:replaces_id].blank?
       s.replaces_id = params[:substitution][:replaces_id].to_i
       replaced = Substitution.find(params[:substitution][:replaces_id])
-      replaced.off_time = params[:substitution][:on_time].to_i
       replaced.save
     end
     s.save
@@ -31,28 +31,24 @@ class GamesController < ApplicationController
       replacing.save
     end
 
-    respond_to do |format|
-      format.json {
-        render json: @game.partitioned_substitutions.to_json(root: false, include: :player)
-      }
-    end
+    respond_with @game.partitioned_substitutions_by_half(params[:substitution][:half])
+                      .to_json(root: false, include: :player), location: nil
   end
 
   def attend
-    @game = params[:game]
+    @game = Game.find(params[:game]) || not_found
     authorize! :attend, @game
-    @attending = current_player.attending? @game
-    if @attending
+
+    attending = current_player.attending? @game
+    if attending
       current_player.unattend @game
     else
       current_player.attend @game
     end
+    @attending = !attending
 
-    @attending = !@attending
-
-    respond_to do |format|
+    respond_with({attending: @attending}) do |format|
       format.html { redirect_to :root }
-      format.json { render json: { attending: @attending } }
     end
   end
 
@@ -61,26 +57,19 @@ class GamesController < ApplicationController
     @team = current_player.team
     @coming = @game.attending_players.where(team_id: @team.id)
 
-    respond_to do |format|
-      format.json {
-        render json: {
-          players: @coming,
-          tmpl: render_to_string(partial: "games/attendance",
-                                 formats: [:html],
-                                 locals: { players: @coming })
-        }
-      }
-    end
+    respond_with({
+      players: @coming,
+      tmpl: render_to_string(partial: "games/attendance",
+                             formats: [:html],
+                             locals: { players: @coming })
+    })
   end
 
-  def substitutions
+  def substitutions_by_half
     @game = Game.find params[:id]
 
-    respond_to do |format|
-      format.json {
-        render json: @game.partitioned_substitutions.to_json(root: false, include: :player)
-      }
-    end
+    respond_with @game.partitioned_substitutions_by_half(params[:half]).
+                       to_json(root: false, include: :player), location: nil
   end
 
   def update_substitution
@@ -89,9 +78,8 @@ class GamesController < ApplicationController
     @sub.off_time = params[:substitution][:off_time].to_i
     @sub.save
 
-    respond_to do |format|
+    respond_with(@sub) do |format|
       format.html { redirect_to edit_report_path(params[:id]) }
-      format.json { render json: @sub.to_json(root: false) }
     end
   end
 end

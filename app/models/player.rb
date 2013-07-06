@@ -62,15 +62,15 @@ class Player < ActiveRecord::Base
     self.scheduled_attendances.where(game_id: game_id).any?
   end
 
-  def attend game_id
+  def attend game
     att = ScheduledAttendance.new
     att.player = self
-    att.game_id = game_id
+    att.game = game
     att.save
   end
 
-  def unattend game_id
-    self.scheduled_attendances.where(game_id: game_id).delete_all
+  def unattend game
+    self.scheduled_attendances.where(game_id: game.id).delete_all
   end
 
   def to_param
