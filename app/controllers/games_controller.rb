@@ -22,6 +22,7 @@ class GamesController < ApplicationController
     unless params[:substitution][:replaces_id].blank?
       s.replaces_id = params[:substitution][:replaces_id].to_i
       replaced = Substitution.find(params[:substitution][:replaces_id])
+      replaced.off_time = s.on_time
       replaced.save
     end
     s.save
