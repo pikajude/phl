@@ -90,7 +90,6 @@ class GamesController < ApplicationController
     replaced_by.try(:save)
     @sub.destroy
 
-    respond_with @game.partitioned_substitutions_by_half(params[:substitution][:half]).
-                       to_json(root: false, include: :player), location: nil
+    respond_with(@sub, location: nil)
   end
 end

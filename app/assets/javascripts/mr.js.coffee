@@ -5,7 +5,6 @@ window.MatchReporter = ($scope) ->
     $scope.substitutions = data
     $scope.$apply ->
 
-    $(".tipsy").remove()
     $("a.kill-sub").tipsy({gravity: 's'}).click (e) ->
       e.preventDefault()
       sub = $(this).parent().parent()
@@ -17,7 +16,9 @@ window.MatchReporter = ($scope) ->
             half: $scope.currentHalf
           }
         },
-        success: $scope.render
+        success: (data, status, xhr) ->
+          $("div[data-sub-id=#{data.id}]").remove()
+          $(".tipsy").remove()
       })
 
     angular.element("li.spot div.substitution").resizable {
@@ -31,9 +32,9 @@ window.MatchReporter = ($scope) ->
         }
         m = $scope.getBounds(ui, $(event.target).parent(), true)
         if leftSide
-          $(this).resizable("option", "maxWidth", $(this).width() + ($(this).position().left - (m.leftBound * 3)))
+          $(this).resizable("option", "maxWidth", $(this).width() + ($(this).position().left - $scope.toPosition(m.leftBound)))
         else
-          $(this).resizable("option", "maxWidth", (m.rightBound * 3) - $(this).position().left)
+          $(this).resizable("option", "maxWidth", $scope.toPosition(m.rightBound) - $(this).position().left)
       ,
       stop: (event, ui) ->
         $(this).tipsy("hide").resizable("option", "maxWidth", null)
@@ -50,6 +51,9 @@ window.MatchReporter = ($scope) ->
     }
 
   # some library function stuff
+  $scope.toTime = (x) -> Math.floor(x / 3)
+  $scope.toPosition = (x) -> x * 3
+
   $scope.getBounds = (ui, p, magicFlag) ->
     format = (s) ->
       r = s % 60
@@ -64,19 +68,18 @@ window.MatchReporter = ($scope) ->
     after = _.find p.children().toArray(), (e) ->
       $(e).position().left > thing
 
-    offset = Math.max 0, Math.round(thing / 3)
+    offset = Math.max 0, $scope.toTime(thing)
 
     a = {
       before: before,
       after: after,
       start: offset,
       end: if ui.offset then ui.offset.left else ui.position.left + ui.size.width,
-      leftBound: if before then Math.floor(($(before).position().left + $(before).width()) / 3) else 0,
-      rightBound: if after then Math.floor($(after).position().left / 3) else 300,
+      leftBound: if before then $scope.toTime($(before).position().left + $(before).width()) else 0,
+      rightBound: if after then $scope.toTime($(after).position().left) else 300,
     }
 
-    a.formatted = format(a.start or 0) + " - " + (if magicFlag then format(a.end / 3) else format(a.rightBound))
-    console.log(a)
+    a.formatted = "#{format(a.start or 0)} - #{if magicFlag then format($scope.toTime(a.end)) else format(a.rightBound)}"
 
     a
 
@@ -86,7 +89,7 @@ window.MatchReporter = ($scope) ->
       return if !$scope.substitutions[side] || !$scope.substitutions[side][pos] || !$scope.substitutions[side][pos][idx]
       subs = $scope.substitutions[side][pos][idx]
       ("""
-      <div data-player-id='#{sub.player.id}' data-sub-id='#{sub.id}' class='sub-color-#{genColor(side, sub.player.id)} substitution' style='width: #{(sub.off_time - sub.on_time) * 3}px; left: #{sub.on_time * 3}px' data-width='#{(sub.off_time - sub.on_time) * 3}'>
+      <div data-player-id='#{sub.player.id}' data-sub-id='#{sub.id}' class='sub-color-#{genColor(side, sub.player.id)} substitution' style='width: #{$scope.toPosition(sub.off_time - sub.on_time)}px; left: #{$scope.toPosition(sub.on_time)}px' data-width='#{$scope.toPosition(sub.off_time - sub.on_time)}'>
         <span style='display: block'>
           <a href='#' class='kill-sub' title='Remove this player'>×</a>
           #{sub.player.username}
@@ -109,8 +112,8 @@ window.MatchReporter = ($scope) ->
       data: {
         substitution: {
           id: ev.data("sub-id"),
-          on_time: ev.position().left / 3,
-          off_time: (ev.position().left + ev.width()) / 3
+          on_time: $scope.toTime(ev.position().left),
+          off_time: $scope.toTime(ev.position().left + ev.width())
         }
       }
     }
