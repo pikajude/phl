@@ -17,10 +17,13 @@ Phl::Application.routes.draw do
   get '/games/:id'           => 'games#show'
 
   scope '/games/:id' do
-    get '/substitutions/:half' => 'games#substitutions_by_half'
-    resource :report, path_names: { new: 'make' }
-    post '/substitute' => 'games#substitute'
-    post '/substitution' => 'games#update_substitution'
+    get '/report/make/:half' => 'reports#new', as: 'new_report'
+    resource :report, only: [:create, :destroy]
+    get '/substitutions/:half'  => 'games#substitutions_by_half'
+    post '/substitute'          => 'games#substitute'
+    post '/substitution'        => 'games#update_substitution'
+    post '/substitution/delete' => 'games#delete_substitution'
+    put '/finalize'             => 'games#finalize'
   end
 
   root to: 'players#index'

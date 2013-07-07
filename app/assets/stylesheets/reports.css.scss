@@ -35,6 +35,11 @@
 
   .substitution {
     position: absolute;
+
+    a.kill-sub {
+      font-weight: bold;
+      color: black;
+    }
   }
 
   .sub-color-0 span {
@@ -107,7 +112,7 @@
   #match-reporter {
     position: relative;
     overflow: hidden;
-    border-radius: 3px;
+    border-radius: 5px;
 
     ul.floating {
       width: 50px;
@@ -117,7 +122,7 @@
       top: 27px;
       bottom: 0;
       padding-top: 5px;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.71);
 
       li {
         padding: 5px;
@@ -176,8 +181,13 @@
           background: #bbb;
         }
 
-        &.invalid {
-          background: red;
+        &.invalid .substitution span {
+          background-color: red !important;
+          color: white;
+
+          .kill-sub {
+            color: white;
+          }
         }
       }
 

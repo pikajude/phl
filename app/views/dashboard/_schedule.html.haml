@@ -40,7 +40,7 @@
         %h4= link_to "See match report", report_path(game)
       - elsif can? :report, game
         %h4
-          = link_to "Report match", new_report_path(game)
+          = link_to "Report match", new_report_path(game, 1), "data-no-turbolink" => ""
           - if game.missing_report?
             %span.tooltip.icon-exclamation-sign.no-report-warning{title: "Games without match reports are counted as a forfeit loss for both teams!"}
 

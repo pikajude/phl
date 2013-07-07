@@ -22,7 +22,7 @@ class GamesController < ApplicationController
     unless params[:substitution][:replaces_id].blank?
       s.replaces_id = params[:substitution][:replaces_id].to_i
       replaced = Substitution.find(params[:substitution][:replaces_id])
-      replaced.off_time = s.on_time
+      replaced.off_time = [replaced.off_time, s.on_time].min
       replaced.save
     end
     s.save
@@ -79,8 +79,18 @@ class GamesController < ApplicationController
     @sub.off_time = params[:substitution][:off_time].to_i
     @sub.save
 
-    respond_with(@sub) do |format|
-      format.html { redirect_to edit_report_path(params[:id]) }
-    end
+    respond_with(@sub)
+  end
+
+  def delete_substitution
+    @game = Game.find params[:id]
+    @sub = Substitution.find_by id: params[:substitution][:id]
+    replaced_by = Substitution.find_by(replaces_id: @sub.id)
+    replaced_by.try(:replaces_id=, @sub.replaces_id)
+    replaced_by.try(:save)
+    @sub.destroy
+
+    respond_with @game.partitioned_substitutions_by_half(params[:substitution][:half]).
+                       to_json(root: false, include: :player), location: nil
   end
 end

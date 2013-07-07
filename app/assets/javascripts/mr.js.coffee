@@ -1,12 +1,26 @@
 phl = angular.module('phl', ['ngSanitize'])
 
-window.mr ||= {}
-
 window.MatchReporter = ($scope) ->
   $scope.render = (data) ->
     $scope.substitutions = data
     $scope.$apply ->
-    angular.element("li.spot div").resizable {
+
+    $(".tipsy").remove()
+    $("a.kill-sub").tipsy({gravity: 's'}).click (e) ->
+      e.preventDefault()
+      sub = $(this).parent().parent()
+      $.ajax("/games/#{$scope.gameId}/substitution/delete", {
+        type: "POST",
+        data: {
+          substitution: {
+            id: sub.data("sub-id"),
+            half: $scope.currentHalf
+          }
+        },
+        success: $scope.render
+      })
+
+    angular.element("li.spot div.substitution").resizable {
       handles: "e, w",
       grid: [3, 1],
       start: (event, ui) ->
@@ -17,12 +31,13 @@ window.MatchReporter = ($scope) ->
         }
         m = $scope.getBounds(ui, $(event.target).parent(), true)
         if leftSide
-          $(this).resizable("option", "maxWidth", $(this).width() + ((ui.originalPosition.left / 3) - m.start))
+          $(this).resizable("option", "maxWidth", $(this).width() + ($(this).position().left - (m.leftBound * 3)))
         else
           $(this).resizable("option", "maxWidth", (m.rightBound * 3) - $(this).position().left)
       ,
       stop: (event, ui) ->
         $(this).tipsy("hide").resizable("option", "maxWidth", null)
+        $scope.updateSubstitution($(event.target))
       ,
       resize: (event, ui) ->
         leftSide = $(this).css("cursor").match(/w-/)
@@ -73,6 +88,7 @@ window.MatchReporter = ($scope) ->
       ("""
       <div data-player-id='#{sub.player.id}' data-sub-id='#{sub.id}' class='sub-color-#{genColor(side, sub.player.id)} substitution' style='width: #{(sub.off_time - sub.on_time) * 3}px; left: #{sub.on_time * 3}px' data-width='#{(sub.off_time - sub.on_time) * 3}'>
         <span style='display: block'>
+          <a href='#' class='kill-sub' title='Remove this player'>×</a>
           #{sub.player.username}
         </span>
       </div>
@@ -82,10 +98,21 @@ window.MatchReporter = ($scope) ->
 
   $scope.substitute = (obj) ->
     $.ajax "/games/#{$scope.gameId}/substitute", {
-      dataType: "json",
       data: { substitution: obj }
       type: "POST",
       success: $scope.render
+    }
+
+  $scope.updateSubstitution = (ev) ->
+    $.ajax "/games/#{$scope.gameId}/substitution", {
+      type: "POST",
+      data: {
+        substitution: {
+          id: ev.data("sub-id"),
+          on_time: ev.position().left / 3,
+          off_time: (ev.position().left + ev.width()) / 3
+        }
+      }
     }
 
   # event stuff
@@ -132,6 +159,8 @@ window.MatchReporter = ($scope) ->
       args.replaced_by_id = $(bounds.after).data "sub-id"
     $scope.substitute args
 
+
+  # bindings lol
   angular.element("li.player").draggable {
     opacity: 0.4,
     revert: true,
@@ -158,9 +187,18 @@ window.MatchReporter = ($scope) ->
       $scope.drop ui.draggable[0], self, ui
   }
 
+  $("#half").change (e) ->
+    selectedItem = $(this).children(":selected").val()
+    window.location.pathname = "/games/#{$scope.gameId}/report/make/#{selectedItem}"
+
+  $("#finalize").click (e) ->
+    e.preventDefault()
+    console.log(e)
+
+  # init stuff
 
   $scope.gameId = $("#match-reporter").data "game-id"
-  $scope.currentHalf = 1
+  $scope.currentHalf = $("ul.positions").data "half"
 
   $.ajax "/games/#{$scope.gameId}", {
     success: (data, status, xhr) ->
