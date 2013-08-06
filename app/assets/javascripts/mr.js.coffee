@@ -8,7 +8,7 @@ window.MatchReporter = ($scope) ->
     $("a.kill-sub").tipsy({gravity: 's'}).click (e) ->
       e.preventDefault()
       sub = $(this).parent().parent()
-      $.ajax("/games/#{$scope.gameId}/substitution/delete", {
+      $.ajax "/games/#{$scope.gameId}/substitution/delete", {
         type: "POST",
         data: {
           substitution: {
@@ -19,42 +19,42 @@ window.MatchReporter = ($scope) ->
         success: (data, status, xhr) ->
           $("div[data-sub-id=#{data.id}]").remove()
           $(".tipsy").remove()
-      })
+      }
 
     angular.element("li.spot div.substitution").resizable {
       handles: "e, w",
       grid: [3, 1],
       start: (event, ui) ->
-        leftSide = $(this).css("cursor").match(/w-/)
+        leftSide = $(this).css("cursor").match /w-/
         $(this).tipsy {
           trigger: "manual",
           gravity: if leftSide then 'e' else 'w'
         }
-        m = $scope.getBounds(ui, $(event.target).parent(), true)
+        m = $scope.getBounds ui, $(event.target).parent(), true
         if leftSide
-          $(this).resizable("option", "maxWidth", $(this).width() + ($(this).position().left - $scope.toPosition(m.leftBound)))
+          $(this).resizable "option", "maxWidth", $(this).width() + $(this).position().left - $scope.toPosition(m.leftBound)
         else
-          $(this).resizable("option", "maxWidth", $scope.toPosition(m.rightBound) - $(this).position().left)
+          $(this).resizable "option", "maxWidth", $scope.toPosition(m.rightBound) - $(this).position().left
       ,
       stop: (event, ui) ->
-        $(this).tipsy("hide").resizable("option", "maxWidth", null)
-        $scope.updateSubstitution($(event.target))
+        $(this).tipsy("hide").resizable "option", "maxWidth", null
+        $scope.updateSubstitution $(event.target)
       ,
       resize: (event, ui) ->
-        leftSide = $(this).css("cursor").match(/w-/)
+        leftSide = $(this).css("cursor").match /w-/
         if leftSide
-          $(this).attr("title", $scope.getBounds(ui, $(event.target).parent(), true).formatted.split(" ")[0])
-                 .tipsy("show")
+          $(this).attr("title", $scope.getBounds(ui, $(event.target).parent(), "resize").formatted.split(" ")[0])
+                 .tipsy "show"
         else
-          $(this).attr("title", $scope.getBounds(ui, $(event.target).parent(), true).formatted.split(" ")[2])
-                 .tipsy("show")
+          $(this).attr("title", $scope.getBounds(ui, $(event.target).parent(), "resize").formatted.split(" ")[2])
+                 .tipsy "show"
     }
 
   # some library function stuff
   $scope.toTime = (x) -> Math.floor(x / 3)
   $scope.toPosition = (x) -> x * 3
 
-  $scope.getBounds = (ui, p, magicFlag) ->
+  $scope.getBounds = (ui, p, ty = "insertion") ->
     format = (s) ->
       r = s % 60
       Math.floor(s / 60) + ":" + (if r < 10 then "0" else "") + r
@@ -79,7 +79,11 @@ window.MatchReporter = ($scope) ->
       rightBound: if after then $scope.toTime($(after).position().left) else 300,
     }
 
-    a.formatted = "#{format(a.start or 0)} - #{if magicFlag then format($scope.toTime(a.end)) else format(a.rightBound)}"
+    formatSecondPart = switch ty
+      when "insertion" then a.rightBound
+      when "resize" then $scope.toTime a.end
+
+    a.formatted = "#{format(a.start or 0)} - #{format(formatSecondPart)}"
 
     a
 
@@ -89,10 +93,10 @@ window.MatchReporter = ($scope) ->
       return if !$scope.substitutions[side] || !$scope.substitutions[side][pos] || !$scope.substitutions[side][pos][idx]
       subs = $scope.substitutions[side][pos][idx]
       ("""
-      <div data-player-id='#{sub.player.id}' data-sub-id='#{sub.id}' class='sub-color-#{genColor(side, sub.player.id)} substitution' style='width: #{$scope.toPosition(sub.off_time - sub.on_time)}px; left: #{$scope.toPosition(sub.on_time)}px' data-width='#{$scope.toPosition(sub.off_time - sub.on_time)}'>
+      <div data-player-id='#{sub.player.id}' data-sub-id='#{sub.id}' class='sub-color-#{genColor side, sub.player.id} substitution' style='width: #{$scope.toPosition(sub.off_time - sub.on_time)}px; left: #{$scope.toPosition sub.on_time}px' data-width='#{$scope.toPosition(sub.off_time - sub.on_time)}'>
         <span style='display: block'>
-          <a href='#' class='kill-sub' title='Remove this player'>×</a>
           #{sub.player.username}
+          <a href='#' class='kill-sub' title='Remove this player'>×</a>
         </span>
       </div>
       """ for sub in subs).join ""

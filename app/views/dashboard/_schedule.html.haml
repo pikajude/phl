@@ -1,22 +1,23 @@
 %ul
   - next_game = current_player.team.next_games.first
-  - home = next_game.home_team
-  - away = next_game.away_team
-  %li
-    %h3
-      %span.seed= home.seed.to_s.rjust(2, "0")
-      = colored_team_name home
-      %span.game-order
-        game
-        = next_game.order
-    %h3
-      %span.seed= away.seed.to_s.rjust(2, "0")
-      = colored_team_name away
-      = attendance_button current_player, next_game
-    %h4.view-attendance-link<
-      %i.icon-asterisk.icon-spin.hidden
-      = link_to "Who's coming?", game_attendance_path(next_game), remote: true, class: "closed", id: "attendance-link"
-    .attendance{id: "attendance-#{next_game.id}"}
+  - if next_game
+    - home = next_game.home_team
+    - away = next_game.away_team
+    %li
+      %h3
+        %span.seed= home.seed.to_s.rjust(2, "0")
+        = colored_team_name home
+        %span.game-order
+          game
+          = next_game.order
+      %h3
+        %span.seed= away.seed.to_s.rjust(2, "0")
+        = colored_team_name away
+        = attendance_button current_player, next_game
+      %h4.view-attendance-link<
+        %i.icon-asterisk.icon-spin.hidden
+        = link_to "Who's coming?", game_attendance_path(next_game), remote: true, class: "closed", id: "attendance-link"
+      .attendance{id: "attendance-#{next_game.id}"}
   - current_player.team.previous_games.limit(4).each do |game|
     - h = game.home_team
     - a = game.away_team
