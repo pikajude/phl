@@ -19,7 +19,7 @@ group :test do
   gem "turn"
   gem "capybara"
   gem "poltergeist"
-  gem "test-unit"
+  gem "minitest"
   gem "factory_girl_rails"
   gem "shoulda"
   gem "faker"

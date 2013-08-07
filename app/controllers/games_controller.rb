@@ -92,4 +92,8 @@ class GamesController < ApplicationController
 
     respond_with(@sub, location: nil)
   end
+
+  def finalize
+    debugger
+  end
 end

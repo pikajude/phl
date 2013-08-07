@@ -63,7 +63,7 @@ class Game < ActiveRecord::Base
   def update_points
     Team.update_points
   end
-  
+
   def update_seeds
     self.home_team.save
     self.away_team.save
@@ -75,22 +75,18 @@ class Game < ActiveRecord::Base
 
   def update_stats
     self.players.each do |player|
-     player.minutes_played = player.substitutions.map do |sub|
+     player.seconds_played = player.substitutions.map do |sub|
        sub.off_time - sub.on_time
-     end.sum.to_f / 60
+     end.sum
      player.goals = Goal.where(scorer_id: player.id).count
      player.assists = Goal.where('first_assist_id = ? OR second_assist_id = ?',
                                  player.id,
                                  player.id).count
      player.points = player.goals + player.assists
      player.goals_against = Goal.where(scored_against: player.id).count
-     player.gaa = player.goals_against / player.minutes_played * 10
-     player.ppg = player.points / player.minutes_played * 10
+     player.gaa = player.goals_against / (player.seconds_played / 600)
+     player.ppg = player.points / (player.seconds_played / 600)
      player.save
     end
-  end
-
-  def update_substitution_count
-    self.substitution_count = self.substitutions.count
   end
 end

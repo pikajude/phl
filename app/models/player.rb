@@ -13,7 +13,7 @@ class Player < ActiveRecord::Base
   has_many :posts
   has_many :forum_threads
   has_many :scheduled_attendances
-  has_many :substitutions, foreign_key: :player_on_id
+  has_many :substitutions, foreign_key: :player_id
   has_many :player_proposals
   has_many :trades, through: :player_proposals
   has_many :dashboard_boxes
@@ -26,7 +26,7 @@ class Player < ActiveRecord::Base
     options = {
       only: [:id, :team_id, :signature, :title, :rep, :role, :email,
              :avatar_file_name, :points, :goals, :assists, :goals_against,
-             :gaa, :ppg, :minutes_played, :username]
+             :gaa, :ppg, :seconds_played, :username]
     }.update(options)
     super options
   end

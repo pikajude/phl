@@ -3,11 +3,13 @@
     = select_tag :half, options_for_select([["First half", 1], ["Second half", 2], ["Overtime", 3]], params[:half])
     = link_to "Finalize", finalize_path(@game.id), method: :put, id: "finalize"
   .team
+    %h2
+      = colored_team_name @game.home_team
+      %a#home-forfeit{href: "#"} forfeit
     %ul
       - @game.home_team.players.each do |player|
         %li.player{"data-player-id" => player.id, "data-team-id" => @game.home_team_id, "data-drag" => "true", "jqyoui-draggable" => "{animate:true}"}
           %div= player.username
-    %h2= colored_team_name @game.home_team
 
   #match-reporter{"data-game-id" => @game.id}
     %ul.floating
@@ -33,7 +35,9 @@
       %li.spot{"ng-bind-html-unsafe" => "substitution('gk',     #{@game.away_team_id}, 0)", "data-position" => "gk"    , "data-team-id" => @game.away_team_id, "data-reporter-index" => 0}
 
   .team
-    %h2= colored_team_name @game.away_team
+    %h2
+      = colored_team_name @game.away_team
+      %a#away-forfeit{href: "#"} forfeit
     %ul
       - @game.away_team.players.each do |player|
         %li.player{"data-player-id" => player.id, "data-team-id" => @game.away_team_id, "data-drag" => "true", "jqyoui-draggable" => "{animate:true}"}

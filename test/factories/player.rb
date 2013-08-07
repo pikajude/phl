@@ -29,6 +29,6 @@ FactoryGirl.define do
     goals_against 0
     gaa 0.0
     ppg 0.0
-    minutes_played 0.0
+    seconds_played 0
   end
 end

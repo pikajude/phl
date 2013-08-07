@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130707011133) do
+ActiveRecord::Schema.define(version: 20130807183018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,7 +149,7 @@ ActiveRecord::Schema.define(version: 20130707011133) do
     t.integer  "goals_against",                       default: 0
     t.float    "gaa",                                 default: 0.0
     t.float    "ppg",                                 default: 0.0
-    t.float    "minutes_played",                      default: 0.0
+    t.float    "seconds_played",                      default: 0.0
     t.string   "username",                                          null: false
   end
 

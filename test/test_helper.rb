@@ -5,24 +5,8 @@ require 'rails/test_help'
 require 'capybara/rails'
 require 'minitest/autorun'
 
-class ActiveSupport::TestCase
-  ActiveRecord::Migration.check_pending!
-
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  #
-  # Note: You'll currently still have to declare fixtures explicitly in integration tests
-  # -- they do not yet inherit this setting
-  fixtures :all
-
-  # Add more helper methods to be used by all tests here...
+ActiveRecord::Base.establish_connection
+ActiveRecord::Base.connection.tables.each do |table|
+  ActiveRecord::Base.connection.execute("TRUNCATE #{table}")
 end
-
-class ActionDispatch::IntegrationTest
-  include Capybara::DSL
-  extend Shoulda::Context::ClassMethods
-  include Shoulda::Context::InstanceMethods
-
-  Capybara.default_driver = :webkit
-
-  FactoryGirl.create :season
-end
+# FactoryGirl.create :season
