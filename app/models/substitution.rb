@@ -1,8 +1,11 @@
 class Substitution < ActiveRecord::Base
+  include ScopedBySeason
+
   belongs_to :player
   belongs_to :game
   belongs_to :team
   belongs_to :replaces, class_name: :Substitution
+  belongs_to :season
 
   def replacements
     all = []

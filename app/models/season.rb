@@ -12,6 +12,10 @@ class Season < ActiveRecord::Base
         .order('season_number DESC').first
     end
 
+    def current_id
+      self.current.id rescue nil
+    end
+
     def current_week
       Season.current.current_week rescue nil
     end

@@ -24,6 +24,7 @@ group :test do
   gem "shoulda"
   gem "rspec"
   gem "faker"
+  gem "database_cleaner"
 end
 
 group :test, :development do

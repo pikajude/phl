@@ -1,4 +1,6 @@
 class Game < ActiveRecord::Base
+  include ScopedBySeason
+
   REPORT_GRACE_PERIOD = 2.hours
 
   belongs_to :season

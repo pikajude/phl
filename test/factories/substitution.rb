@@ -5,6 +5,7 @@ FactoryGirl.define do
     off_time 300
     team_id { self.game.home_team.id }
     player_id { self.game.home_team.players.first.id }
+    season { Season.current || FactoryGirl.create(:season) }
     gk false
     half 1
   end

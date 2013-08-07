@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :game do
-    season { FactoryGirl.create(:season) }
+    season { Season.current || FactoryGirl.create(:season) }
     home_team { FactoryGirl.create(:team, :season_id => self.season_id) }
     away_team { FactoryGirl.create(:team, :season_id => self.season_id) }
     order 1

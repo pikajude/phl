@@ -15,8 +15,4 @@ RSpec.configure do |config|
   end
 end
 
-ActiveRecord::Base.establish_connection
-ActiveRecord::Base.connection.tables.each do |table|
-  ActiveRecord::Base.connection.execute("TRUNCATE #{table}")
-end
-# FactoryGirl.create :season
+DatabaseCleaner.strategy = :truncation

@@ -1,11 +1,13 @@
 class Team < ActiveRecord::Base
+  include ScopedBySeason
+
   has_many :draft_picks
   has_many :players
   has_many :substitutions
   has_many :trades
 
   belongs_to :season
-  
+
   before_save :sluggify
 
   has_attached_file :logo, styles: {

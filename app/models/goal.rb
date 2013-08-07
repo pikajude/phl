@@ -25,7 +25,7 @@ class Goal < ActiveRecord::Base
   scope :by_time, -> { order(:half, :time) }
 
   def reported?
-    self.game.reported
+    Game.find(self.game_id).reported?
   end
 
   def readable_time
