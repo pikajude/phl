@@ -5,6 +5,16 @@ require 'rails/test_help'
 require 'capybara/rails'
 require 'minitest/autorun'
 
+class MiniTest::Unit::TestCase
+  include FactoryGirl::Syntax::Methods
+end
+
+RSpec.configure do |config|
+  config.expect_with :rspec do |c|
+    c.syntax = :should
+  end
+end
+
 ActiveRecord::Base.establish_connection
 ActiveRecord::Base.connection.tables.each do |table|
   ActiveRecord::Base.connection.execute("TRUNCATE #{table}")
