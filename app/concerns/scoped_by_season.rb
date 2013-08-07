@@ -10,6 +10,8 @@ module ScopedBySeason
         none
       end
     }
-    scope :all_time, -> { none }
+    def self.all_time
+      unscoped
+    end
   end
 end

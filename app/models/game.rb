@@ -12,11 +12,7 @@ class Game < ActiveRecord::Base
 
   validate :different_teams
   before_save :update_seeds, if: :reported
-  before_save :update_stats, if: ->(t) {
-    (t.substitutions.any?(&:changed?) ||
-      t.substitutions.count != t.substitution_count) &&
-    t.reported
-  }
+  before_save :update_stats, if: :reported
   before_save :update_substitution_count, if: :reported
   before_save :update_overtime, if: :reported
   after_save  :update_points, if: :reported

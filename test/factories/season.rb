@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :season do
     ignore do
-      full_schedule false
+      schedule false
     end
 
     name "Season 9"
@@ -11,7 +11,7 @@ FactoryGirl.define do
 
     after(:create) do |season, evaluator|
       FactoryGirl.create_list(:team, 10, season: season)
-      season.schedule! if evaluator.full_schedule
+      season.schedule! if evaluator.schedule
     end
   end
 end

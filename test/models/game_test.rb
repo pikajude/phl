@@ -5,10 +5,6 @@ class GameTest < MiniTest::Unit::TestCase
     @season = create(:season)
   end
 
-  def teardown
-    DatabaseCleaner.clean
-  end
-
   context "reports" do
     should "complain about a missing match report" do
       @game = create(:game, played_on: 3.hours.ago)

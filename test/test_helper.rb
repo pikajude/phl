@@ -7,6 +7,10 @@ require 'minitest/autorun'
 
 class MiniTest::Unit::TestCase
   include FactoryGirl::Syntax::Methods
+
+  def teardown
+    DatabaseCleaner.clean
+  end
 end
 
 RSpec.configure do |config|

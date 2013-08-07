@@ -3,4 +3,4 @@ Dir[File.expand_path("test/factories/*.rb", Rails.root)].each do |file|
   require file
 end
 
-FactoryGirl.create :season
+FactoryGirl.create :season, schedule: true
